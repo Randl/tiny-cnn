@@ -28,7 +28,7 @@
 /**
  * define to enable OMP parallelization
  */
-// #define CNN_USE_OMP
+#define CNN_USE_OMP
 
 /**
  * define to enable Grand Central Dispatch parallelization
