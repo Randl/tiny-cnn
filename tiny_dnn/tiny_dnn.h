@@ -17,6 +17,7 @@
 #include "tiny_dnn/core/framework/program_manager.h"
 #include "layers/batchnorm_layer.h"
 #include "layers/binarized_fc_layer.h"
+#include "layers/binarynet_layer.h"
 
 #include "tiny_dnn/layers/arithmetic_layer.h"
 #include "tiny_dnn/layers/average_pooling_layer.h"
