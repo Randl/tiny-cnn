@@ -19,6 +19,7 @@
 #include "layers/binarized_fc_layer.h"
 #include "layers/binarynet_layer.h"
 #include "layers/binarized_conv_layer.h"
+#include "layers/offloaded_layer.h"
 
 #include "tiny_dnn/layers/arithmetic_layer.h"
 #include "tiny_dnn/layers/average_pooling_layer.h"
