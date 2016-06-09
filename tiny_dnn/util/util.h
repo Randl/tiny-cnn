@@ -214,23 +214,7 @@ std::string to_string(T value) {
   return os.str();
 }
 
-#define CNN_LOG_VECTOR(vec, name)
-/*
-void CNN_LOG_VECTOR(const vec_t& vec, const std::string& name) {
-    std::cout << name << ",";
-
-    if (vec.empty()) {
-        std::cout << "(empty)" << std::endl;
-    }
-    else {
-        for (size_t i = 0; i < vec.size(); i++) {
-            std::cout << vec[i] << ",";
-        }
-    }
-
-    std::cout << std::endl;
-}
-*/
+void CNN_LOG_VECTOR(const vec_t& vec, const std::string& name);
 
 template <typename T, typename Pred, typename Sum>
 serial_size_t sumif(const std::vector<T> &vec, Pred p, Sum s) {
