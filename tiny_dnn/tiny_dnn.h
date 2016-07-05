@@ -22,6 +22,7 @@
 #include "layers/offloaded_layer.h"
 #include "layers/bnn_threshold_layer.h"
 #include "layers/chaninterleave_layer.h"
+#include "layers/monitor_layer.h"
 
 #include "tiny_dnn/layers/arithmetic_layer.h"
 #include "tiny_dnn/layers/average_pooling_layer.h"
