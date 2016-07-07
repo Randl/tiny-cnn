@@ -44,6 +44,27 @@ class fully_connected_layer : public layer {
     init_backend(std::move(other.engine()));
   }
 
+  void loadFromBinaryFile(std::string fileName) {
+      // TODO this assumes the binary file always uses a float for each parameter
+
+      std::ifstream wf(fileName, std::ios::binary | std::ios::in);
+      if(!wf.is_open())
+        throw "Could not open file";
+      for(unsigned int line = 0 ; line < Base::W_.size(); line++) {
+        float e = 0;
+        wf.read((char *)&e, sizeof(float));
+        W_[line] = e;
+      }
+      if(has_bias_) {
+          for(unsigned int line = 0 ; line < Base::b_.size(); line++) {
+            float e = 0;
+            wf.read((char *)&e, sizeof(float));
+            b_[line] = e;
+          }
+      }
+      wf.close();
+    }
+
   serial_size_t fan_in_size() const override { return params_.in_size_; }
 
   serial_size_t fan_out_size() const override { return params_.out_size_; }
