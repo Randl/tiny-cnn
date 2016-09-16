@@ -152,4 +152,32 @@ inline void parse_mnist_images(const std::string &image_file,
   }
 }
 
+
+inline void parse_mnist_images_3channels(const std::string& image_file,
+    std::vector<vec_t> *images,
+    float_t scale_min,
+    float_t scale_max,
+    int x_padding,
+    int y_padding) {
+
+    if (x_padding < 0 || y_padding < 0)
+        throw nn_error("padding size must not be negative");
+    if (scale_min >= scale_max)
+        throw nn_error("scale_max must be greater than scale_min");
+
+    std::ifstream ifs(image_file.c_str(), std::ios::in | std::ios::binary);
+
+    if (ifs.bad() || ifs.fail())
+        throw nn_error("failed to open file:" + image_file);
+
+    detail::mnist_header header;
+
+    detail::parse_mnist_header(ifs, header);
+    for (uint32_t i = 0; i < header.num_items/3; i++) {
+        vec_t image;
+        detail::parse_mnist_image_3channels(ifs, header, scale_min, scale_max, x_padding, y_padding, image);
+        images->push_back(image);
+    }
+}
+
 }  // namespace tiny_dnn
