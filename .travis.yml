@@ -32,10 +32,13 @@ addons:
       # coveralls dependencies
       - gem
       - lcov
+      #libdnn
+      - libviennacl-dev 
 
 branches:
   only:
     - master
+    - travis_opencl
 env:
   global:
     - USE_TBB=ON
@@ -44,8 +47,9 @@ env:
     - COVERALLS=ON
  
   matrix:
-    - USE_SSE=OFF USE_AVX=OFF
-    - USE_SSE=ON  USE_AVX=ON
+    - USE_SSE=OFF USE_AVX=OFF USE_LIBDNN=OFF USE_OPENCL=OFF
+    - USE_SSE=ON  USE_AVX=ON USE_LIBDNN=OFF USE_OPENCL=OFF
+    - USE_SSE=ON  USE_AVX=ON USE_LIBDNN=ON USE_OPENCL=ON
 
 matrix:
   exclude: # On OSX g++ is a symlink to clang++ by default 
@@ -57,12 +61,27 @@ before_install:
        export CC="gcc-4.8";
        export CXX="g++-4.8";
     fi
+  - if [ $TRAVIS_OS_NAME = "linux" ] && [ "$USE_OPENCL" == "ON" ]; then
+      bash .travis/amd_sdk.sh;
+      tar -xjf AMD-SDK.tar.bz2;
+      AMDAPPSDK=${HOME}/AMDAPPSDK;
+      export OPENCL_VENDOR_PATH=${AMDAPPSDK}/etc/OpenCL/vendors;
+      mkdir -p ${OPENCL_VENDOR_PATH};
+      sh AMD-APP-SDK*.sh --tar -xf -C ${AMDAPPSDK};
+      echo libamdocl64.so > ${OPENCL_VENDOR_PATH}/amdocl64.icd;
+      export LD_LIBRARY_PATH=${AMDAPPSDK}/lib/x86_64:${LD_LIBRARY_PATH};
+      chmod +x ${AMDAPPSDK}/bin/x86_64/clinfo;
+      ${AMDAPPSDK}/bin/x86_64/clinfo;
+    fi;
   - gcc --version
   - g++ --version
 
 install:
   - bash -x .travis/install.sh
   - gem install coveralls-lcov
+  -  wget -O libdnn.tar.gz https://github.com/naibaf7/libdnn/archive/master.tar.gz
+  - tar -xzvf libdnn.tar.gz
+  - pushd libdnn && mkdir build && cd build && cmake -DUSE_CUDA=OFF .. && make && sudo make install && popd
 
 before_script:
   - if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$CXX" == "g++-4.8" ]; then
@@ -70,6 +89,8 @@ before_script:
       cmake -DUSE_TBB=$USE_TBB
             -DUSE_SSE=$USE_SSE
             -DUSE_AVX=$USE_AVX
+            -DUSE_LIBDNN=$USE_LIBDNN
+            -DUSE_OPENCL=$USE_OPENCL
             -DBUILD_TESTS=$BUILD_TESTS
             -DCOVERALLS=$COVERALLS
             -DBUILD_EXAMPLES=$BUILD_EXAMPLES .;
@@ -77,6 +98,8 @@ before_script:
   - if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$CXX" == "clang++" ]; then
       cmake -DUSE_SSE=$USE_SSE
             -DUSE_AVX=$USE_AVX
+            -DUSE_LIBDNN=$USE_LIBDNN
+            -DUSE_OPENCL=$USE_OPENCL
             -DBUILD_TESTS=$BUILD_TESTS
             -DBUILD_EXAMPLES=$BUILD_EXAMPLES .;
     fi
