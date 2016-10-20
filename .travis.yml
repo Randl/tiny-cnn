@@ -79,11 +79,11 @@ before_install:
 install:
   - bash -x .travis/install.sh
   - gem install coveralls-lcov
+
+before_script:
   -  wget -O libdnn.tar.gz https://github.com/naibaf7/libdnn/archive/master.tar.gz
   - tar -xzvf libdnn.tar.gz
   - pushd libdnn-master && mkdir build && cd build && cmake -DUSE_CUDA=OFF .. && make && sudo make install && popd
-
-before_script:
   - if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$CXX" == "g++-4.8" ]; then
       lcov --directory . --zerocounters;
       cmake -DUSE_TBB=$USE_TBB
