@@ -33,7 +33,7 @@ addons:
       - gem
       - lcov
       #libdnn
-      - libviennacl-dev 
+      #- libviennacl-dev 
 
 branches:
   only:
