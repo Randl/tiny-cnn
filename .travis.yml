@@ -82,9 +82,15 @@ install:
   - gem install coveralls-lcov
 
 before_script:
-  -  wget -O libdnn.tar.gz https://github.com/naibaf7/libdnn/archive/master.tar.gz
-  - tar -xzvf libdnn.tar.gz
-  - pushd libdnn-master && mkdir build && cd build && cmake -DUSE_CUDA=OFF .. && make && sudo make install && popd
+
+  - if [ $TRAVIS_OS_NAME = "linux" ] && [ "$USE_LIBDNN" == "ON" ]; then
+      wget -O viennacl-dev.tar.gz https://github.com/viennacl/viennacl-dev/archive/master.tar.gz;
+      tar -xzvf viennacl-dev.tar.gz;
+      pushd viennacl-dev-master && sudo cp -r viennacl /usr/include && popd;
+      wget -O libdnn.tar.gz https://github.com/naibaf7/libdnn/archive/master.tar.gz;
+      tar -xzvf libdnn.tar.gz;
+      pushd libdnn-master && mkdir build && cd build && cmake -DUSE_CUDA=OFF .. && make && sudo make install && popd
+    fi;
   - if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$CXX" == "g++-4.8" ]; then
       lcov --directory . --zerocounters;
       cmake -DUSE_TBB=$USE_TBB
