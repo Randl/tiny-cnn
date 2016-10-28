@@ -76,10 +76,10 @@ class relu : public function {
  public:
   using function::df;
   float_t f(const vec_t &v, size_t i) const override {
-    return std::max(float_t{0}, v[i]);
+    return std::max(float_t{0.0}, v[i]);
   }
   float_t df(float_t y) const override {
-    return y > float_t{0} ? float_t{1} : float_t{0};
+    return y > float_t{0.0} ? float_t{1.0} : float_t{0.0};
   }
   std::pair<float_t, float_t> scale() const override {
     return std::make_pair(float_t(0.1), float_t(0.9));
@@ -92,10 +92,10 @@ class leaky_relu : public function {
  public:
   using function::df;
   float_t f(const vec_t &v, size_t i) const override {
-    return (v[i] > float_t{0}) ? v[i] : float_t(0.01) * v[i];
+    return (v[i] > float_t{0.0}) ? v[i] : float_t(0.01) * v[i];
   }
   float_t df(float_t y) const override {
-    return y > float_t{0} ? float_t{1} : float_t(0.01);
+    return y > float_t{0.0} ? float_t{1.0} : float_t(0.01);
   }
   std::pair<float_t, float_t> scale() const override {
     return std::make_pair(float_t(0.1), float_t(0.9));
@@ -106,10 +106,10 @@ class elu : public function {
  public:
   using function::df;
   float_t f(const vec_t &v, size_t i) const override {
-    return (v[i] < float_t(0) ? (exp(v[i]) - float_t(1)) : v[i]);
+    return (v[i] < float_t(0.0) ? (exp(v[i]) - float_t(1.0)) : v[i]);
   }
   float_t df(float_t y) const override {
-    return (y > float_t(0) ? float_t(1) : (float_t(1) + y));
+    return (y > float_t(0.0) ? float_t(1) : (float_t(1.0) + y));
   }
   std::pair<float_t, float_t> scale() const override {
     return std::make_pair(float_t(0.1), float_t(0.9));
@@ -140,7 +140,7 @@ class softmax : public function {
   bool one_hot() const override { return false; }
 
   std::pair<float_t, float_t> scale() const override {
-    return std::make_pair(float_t{0}, float_t{1});
+    return std::make_pair(float_t{0.0}, float_t{1.0});
   }
 };
 

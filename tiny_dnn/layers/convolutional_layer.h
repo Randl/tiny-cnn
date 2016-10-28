@@ -328,7 +328,7 @@ class convolutional_layer : public feedforward_layer<Activation> {
   void set_sample_count(serial_size_t sample_count) override {
     Base::set_sample_count(sample_count);
     cws_.prev_delta_padded_.resize(sample_count,
-                                   vec_t(params_.in_padded.size(), float_t(0)));
+                                   vec_t(params_.in_padded.size(), float_t(0.0)));
   }
 
   std::vector<index3d<serial_size_t>> in_shape() const override {
@@ -444,7 +444,7 @@ class convolutional_layer : public feedforward_layer<Activation> {
     // init padding buffer
     if (params_.pad_type == padding::same) {
       cws_.prev_delta_padded_.resize(
-        1, vec_t(params_.in_padded.size(), float_t(0)));
+        1, vec_t(params_.in_padded.size(), float_t(0.0)));
     }
 
     // set parameters to padding operation

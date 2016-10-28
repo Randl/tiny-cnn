@@ -47,7 +47,7 @@ void tiny_average_pooling_kernel(
       float_t bias   = b[d];
       for (serial_size_t i = 0; i < oarea; ++i, ++idx) {
         const auto &connections = out2wi[idx];
-        float_t value{0};
+        float_t value{0.0};
         for (auto connection : connections) value += in[connection.second];
         value *= weight;
         value += bias;
@@ -97,7 +97,7 @@ void tiny_average_pooling_back_kernel(
 
     for (size_t i = 0; i < weight2io.size(); ++i) {
       const auto &connections = weight2io[i];
-      float_t diff{0};
+      float_t diff{0.0};
 
       for (auto connection : connections)
         diff += prev_out[connection.first] * curr_delta[connection.second];
@@ -107,7 +107,7 @@ void tiny_average_pooling_back_kernel(
 
     for (size_t i = 0; i < bias2out.size(); i++) {
       const std::vector<serial_size_t> &outs = bias2out[i];
-      float_t diff{0};
+      float_t diff{0.0};
 
       for (auto o : outs) diff += curr_delta[o];
 

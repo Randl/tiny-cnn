@@ -79,7 +79,7 @@ class partial_connected_layer : public feedforward_layer<Activation> {
 
         float_t &a_element = a_sample[i];
 
-        a_element = float_t{0};
+        a_element = float_t{0.0};
 
         for (auto connection : connections)
           a_element += W[connection.first] * in[sample][connection.second];
@@ -113,7 +113,7 @@ class partial_connected_layer : public feedforward_layer<Activation> {
       for_(parallelize_, 0, in2wo_.size(), [&](const blocked_range &r) {
         for (int i = r.begin(); i != r.end(); i++) {
           const wo_connections &connections = in2wo_[i];
-          float_t delta{0};
+          float_t delta{0.0};
 
           for (auto connection : connections)
             delta +=
@@ -126,7 +126,7 @@ class partial_connected_layer : public feedforward_layer<Activation> {
       for_(parallelize_, 0, weight2io_.size(), [&](const blocked_range &r) {
         for (int i = r.begin(); i < r.end(); i++) {
           const io_connections &connections = weight2io_[i];
-          float_t diff{0};
+          float_t diff{0.0};
 
           for (auto connection : connections)
             diff += prev_out[sample][connection.first] *
@@ -138,7 +138,7 @@ class partial_connected_layer : public feedforward_layer<Activation> {
 
       for (size_t i = 0; i < bias2out_.size(); i++) {
         const std::vector<serial_size_t> &outs = bias2out_[i];
-        float_t diff{0};
+        float_t diff{0.0};
 
         for (auto o : outs) diff += curr_delta[sample][o];
 

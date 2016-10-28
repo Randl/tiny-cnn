@@ -42,7 +42,7 @@ inline void tiny_deconv2d_back_kernel(const deconv_params &params,
             const float_t *ppw = pw;
 
             float_t *ppdelta_dst = pdelta_dst + y * params.in.width_ + x;
-            float_t sum{0};
+            float_t sum{0.0};
 
             for (serial_size_t wy = 0; wy < params.weight.height_; wy++) {
               for (serial_size_t wx = 0; wx < params.weight.width_; wx++) {
@@ -64,7 +64,7 @@ inline void tiny_deconv2d_back_kernel(const deconv_params &params,
 
         for (serial_size_t wy = 0; wy < params.weight.height_; wy++) {
           for (serial_size_t wx = 0; wx < params.weight.width_; wx++) {
-            float_t dst{0};
+            float_t dst{0.0};
 
             serial_size_t idx    = 0;
             idx                  = params.in.get_index(0, 0, inc);

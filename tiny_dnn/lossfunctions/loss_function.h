@@ -39,7 +39,7 @@ class absolute {
  public:
   static float_t f(const vec_t &y, const vec_t &t) {
     assert(y.size() == t.size());
-    float_t d{0};
+    float_t d{0.0};
 
     for (serial_size_t i = 0; i < y.size(); ++i) d += std::abs(y[i] - t[i]);
 
@@ -49,7 +49,7 @@ class absolute {
   static vec_t df(const vec_t &y, const vec_t &t) {
     assert(y.size() == t.size());
     vec_t d(t.size());
-    float_t factor = float_t(1) / static_cast<float_t>(t.size());
+    float_t factor = float_t(1.0) / static_cast<float_t>(t.size());
 
     for (serial_size_t i = 0; i < y.size(); ++i) {
       float_t sign = y[i] - t[i];
@@ -58,7 +58,7 @@ class absolute {
       else if (sign > float_t{0.f})
         d[i] = factor;
       else
-        d[i] = {0};
+        d[i] = float_t{0.0};
     }
 
     return d;
@@ -72,8 +72,8 @@ class absolute_eps {
  public:
   static float_t f(const vec_t &y, const vec_t &t) {
     assert(y.size() == t.size());
-    float_t d{0};
-    const float_t eps = float_t(1) / fraction;
+    float_t d{0.0};
+    const float_t eps = float_t(1.0) / fraction;
 
     for (serial_size_t i = 0; i < y.size(); ++i) {
       float_t diff = std::abs(y[i] - t[i]);
@@ -85,8 +85,8 @@ class absolute_eps {
   static vec_t df(const vec_t &y, const vec_t &t) {
     assert(y.size() == t.size());
     vec_t d(t.size());
-    const float_t factor = float_t(1) / static_cast<float_t>(t.size());
-    const float_t eps    = float_t(1) / fraction;
+    const float_t factor = float_t(1.0) / static_cast<float_t>(t.size());
+    const float_t eps    = float_t(1.0) / fraction;
 
     for (serial_size_t i = 0; i < y.size(); ++i) {
       float_t sign = y[i] - t[i];
@@ -106,11 +106,11 @@ class cross_entropy {
  public:
   static float_t f(const vec_t &y, const vec_t &t) {
     assert(y.size() == t.size());
-    float_t d{0};
+    float_t d{0.0};
 
     for (serial_size_t i = 0; i < y.size(); ++i)
       d += -t[i] * std::log(y[i]) -
-           (float_t(1) - t[i]) * std::log(float_t(1) - y[i]);
+           (float_t(1) - t[i]) * std::log(float_t(1.0) - y[i]);
 
     return d;
   }
@@ -120,7 +120,7 @@ class cross_entropy {
     vec_t d(t.size());
 
     for (serial_size_t i = 0; i < y.size(); ++i)
-      d[i]               = (y[i] - t[i]) / (y[i] * (float_t(1) - y[i]));
+      d[i]               = (y[i] - t[i]) / (y[i] * (float_t(1.0) - y[i]));
 
     return d;
   }

@@ -97,7 +97,7 @@ class avx_backend : public backend {
     tensor_t &a                               = *out_data[1];
     const tensor_t &in                        = *in_data[0];  // input
 
-    fill_tensor(a, float_t{0});
+    fill_tensor(a, float_t{0.0});
 
     kernels::avx_deconv2d_kernel(*params_d_, in, W, bias, a,
                                  layer_->parallelize());
@@ -143,7 +143,7 @@ class avx_backend : public backend {
 
     backward_activation(*out_grad[0], *out_data[0], curr_delta);
 
-    fill_tensor(*prev_delta, float_t{0});
+    fill_tensor(*prev_delta, float_t{0.0});
 
     kernels::avx_deconv2d_back_kernel(*params_d_, prev_out, W, dW, db,
                                       curr_delta, prev_delta);

@@ -71,7 +71,7 @@ class tiny_backend : public backend {
     const std::vector<const vec_t *> &in =
       (*conv_layer_worker_storage_).prev_out_padded_;  // input // NOLINT
 
-    fill_tensor(a, float_t{0});
+    fill_tensor(a, float_t{0.0});
 
     for (serial_size_t i = 0; i < in.size(); i++) {
       kernels::tiny_quantized_conv2d_kernel(*params_c_, *in[i], W, bias, a[i],
@@ -94,7 +94,7 @@ class tiny_backend : public backend {
     const std::vector<const vec_t *> &in =
       (*conv_layer_worker_storage_).prev_out_padded_;  // input // NOLINT
 
-    fill_tensor(a, float_t{0});
+    fill_tensor(a, float_t{0.0});
     for (serial_size_t i = 0; i < in.size(); i++) {
       kernels::tiny_quantized_conv2d_kernel(*params_c_, *in[i], W, bias,
                                             in_r[i], W_r, b_r, a[i], a_r[i],
@@ -123,7 +123,7 @@ class tiny_backend : public backend {
 
     backward_activation(*out_grad[0], *out_data[0], curr_delta);
 
-    fill_tensor(*prev_delta, float_t{0});
+    fill_tensor(*prev_delta, float_t{0.0});
 
     for (serial_size_t i = 0; i < prev_out.size(); i++) {
       kernels::tiny_quantized_conv2d_back_kernel(*params_c_, *prev_out[i], W,
@@ -145,7 +145,7 @@ class tiny_backend : public backend {
     const tensor_t &in                        = *in_data[0];  // input
 
     fill_tensor(
-      a, float_t{0},
+      a, float_t{0.0},
       params_d_->out.size());  // deconv2d-kernel requires padded size buffer
 
     kernels::tiny_deconv2d_kernel(*params_d_, in, W, bias, a,
@@ -165,7 +165,7 @@ class tiny_backend : public backend {
     tensor_t &a                               = *out_data[1];
 
     fill_tensor(
-      a, float_t{0},
+      a, float_t{0.0},
       params_d_->out.size());  // deconv2d-kernel requires padded size buffer
 
     for (serial_size_t i = 0; i < in.size(); i++) {
@@ -191,7 +191,7 @@ class tiny_backend : public backend {
     tensor_t &a_r                             = *out_data[2];
 
     fill_tensor(
-      a, float_t{0},
+      a, float_t{0.0},
       params_d_->out.size());  // deconv2d-kernel requires padded size buffer
 
     for (serial_size_t i = 0; i < in.size(); i++) {
@@ -227,7 +227,7 @@ class tiny_backend : public backend {
 
     backward_activation(*out_grad[0], *out_data[0], curr_delta);
 
-    fill_tensor(*prev_delta, float_t{0});
+    fill_tensor(*prev_delta, float_t{0.0});
 
     kernels::tiny_deconv2d_back_kernel(*params_d_, prev_out, W, dW, db,
                                        curr_delta, prev_delta);
@@ -256,7 +256,7 @@ class tiny_backend : public backend {
 
     backward_activation(*out_grad[0], *out_data[0], curr_delta);
 
-    fill_tensor(*prev_delta, float_t{0});
+    fill_tensor(*prev_delta, float_t{0.0});
 
     for (serial_size_t i = 0; i < prev_out.size(); i++) {
       kernels::tiny_quantized_deconv2d_back_kernel(*params_d_, prev_out[i], W,

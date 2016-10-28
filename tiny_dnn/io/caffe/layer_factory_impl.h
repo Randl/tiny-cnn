@@ -156,13 +156,13 @@ inline std::shared_ptr<layer> create_ave_pool(layer_size_t pool_size_w,
     pool_size_h, stride_w, stride_h, pad_type);
 
   // tiny-dnn has trainable parameter in average-pooling layer
-  float_t weight = float_t{1} / (pool_size_w * pool_size_h);
+  float_t weight = float_t{1.0} / (pool_size_w * pool_size_h);
 
   vec_t &w = *ap->weights()[0];
   vec_t &b = *ap->weights()[1];
 
   std::fill(w.begin(), w.end(), weight);
-  std::fill(b.begin(), b.end(), float_t{0});
+  std::fill(b.begin(), b.end(), float_t{0.0});
 
   *top_shape = ap->out_shape()[0];
   ap->init_weight();
@@ -475,7 +475,7 @@ inline void load_weights_pool(const caffe::LayerParameter &src, layer *dst) {
     }
 
     // tiny-dnn has trainable parameter in average-pooling layer
-    float_t weight = float_t{1} / sqr(pool_size);
+    float_t weight = float_t{1.0} / sqr(pool_size);
 
     // TODO
     /*if (!dst->weight().empty()) {
@@ -493,7 +493,7 @@ inline void load_weights_pool(const caffe::LayerParameter &src, layer *dst) {
       std::fill(w.begin(), w.end(), weight);
     }
     if (!b.empty()) {
-      std::fill(b.begin(), b.end(), float_t{0});
+      std::fill(b.begin(), b.end(), float_t{0.0});
       // dst->init_bias();
     }
   }

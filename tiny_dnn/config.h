@@ -74,16 +74,23 @@
 #define CNN_TASK_SIZE 8
 #endif
 
+#ifdef CNN_USE_HALF
+#include "tiny_dnn/util/half.h"
+#endif
 namespace tiny_dnn {
 
 /**
  * calculation data type
  * you can change it to float, or user defined class (fixed point,etc)
  **/
-#ifdef CNN_USE_DOUBLE
+#if defined(CNN_USE_HALF)
+typedef tiny_dnn::half float_t;
+#else
+#if defined(CNN_USE_DOUBLE)
 typedef double float_t;
 #else
 typedef float float_t;
+#endif
 #endif
 
 /**

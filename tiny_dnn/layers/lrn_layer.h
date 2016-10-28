@@ -121,7 +121,7 @@ class lrn_layer : public feedforward_layer<Activation> {
 
  private:
   void forward_across(const vec_t &in, vec_t &out) {
-    std::fill(in_square_.begin(), in_square_.end(), float_t{0});
+    std::fill(in_square_.begin(), in_square_.end(), float_t{0.0});
 
     for (serial_size_t i = 0; i < size_ / 2; i++) {
       serial_size_t idx = in_shape_.get_index(0, 0, i);

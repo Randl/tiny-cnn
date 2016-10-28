@@ -342,7 +342,7 @@ inline void tiny_quantized_deconv2d_back_kernel(const deconv_params &params,
       serial_size_t idx     = params.out.get_index(0, 0, outc);
       const float_t *delta  = &curr_delta[idx];
       const float_t *deltaa = delta + params.out.width_ * params.out.height_;
-      db[outc] += std::accumulate(delta, deltaa, float_t{0});
+      db[outc] += std::accumulate(delta, deltaa, float_t{0.0});
     }
   }
 }

@@ -59,7 +59,7 @@ class xavier : public scalable {
  **/
 class lecun : public scalable {
  public:
-  lecun() : scalable(float_t{1}) {}
+  lecun() : scalable(float_t{1.0}) {}
   explicit lecun(float_t value) : scalable(value) {}
 
   void fill(vec_t* weight,
@@ -75,7 +75,7 @@ class lecun : public scalable {
 
 class gaussian : public scalable {
  public:
-  gaussian() : scalable(float_t{1}) {}
+  gaussian() : scalable(float_t{1.0}) {}
   explicit gaussian(float_t sigma) : scalable(sigma) {}
 
   void fill(vec_t* weight,
@@ -84,13 +84,13 @@ class gaussian : public scalable {
     CNN_UNREFERENCED_PARAMETER(fan_in);
     CNN_UNREFERENCED_PARAMETER(fan_out);
 
-    gaussian_rand(weight->begin(), weight->end(), float_t{0}, scale_);
+    gaussian_rand(weight->begin(), weight->end(), float_t{0.0}, scale_);
   }
 };
 
 class constant : public scalable {
  public:
-  constant() : scalable(float_t{0}) {}
+  constant() : scalable(float_t{0.0}) {}
   explicit constant(float_t value) : scalable(value) {}
 
   void fill(vec_t* weight,
@@ -115,7 +115,7 @@ class he : public scalable {
 
     const float_t sigma = std::sqrt(scale_ / fan_in);
 
-    gaussian_rand(weight->begin(), weight->end(), float_t{0}, sigma);
+    gaussian_rand(weight->begin(), weight->end(), float_t{0.0}, sigma);
   }
 };
 

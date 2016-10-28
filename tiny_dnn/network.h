@@ -426,7 +426,7 @@ class network {
    **/
   template <typename E>
   float_t get_loss(const std::vector<vec_t> &in, const std::vector<vec_t> &t) {
-    float_t sum_loss = float_t(0);
+    float_t sum_loss = float_t(0.0);
 
     for (size_t i = 0; i < in.size(); i++) {
       const vec_t predicted = predict(in[i]);
@@ -440,7 +440,7 @@ class network {
    **/
   template <typename E, typename T>
   float_t get_loss(const std::vector<T> &in, const std::vector<tensor_t> &t) {
-    float_t sum_loss = float_t(0);
+    float_t sum_loss = float_t(0.0);
     std::vector<tensor_t> in_tensor;
     normalize_tensor(in, in_tensor);
 
@@ -891,13 +891,13 @@ class network {
     // calculate dw/dE by numeric
     float_t prev_w = w[check_index];
 
-    float_t f_p    = float_t(0);
+    float_t f_p    = float_t(0.0);
     w[check_index] = prev_w + delta;
     for (serial_size_t i = 0; i < sample_count; i++) {
       f_p += get_loss<E>(in[i], v[i]);
     }
 
-    float_t f_m    = float_t(0);
+    float_t f_m    = float_t(0.0);
     w[check_index] = prev_w - delta;
     for (serial_size_t i = 0; i < sample_count; i++) {
       f_m += get_loss<E>(in[i], v[i]);

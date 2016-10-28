@@ -29,8 +29,8 @@ class linear_layer : public feedforward_layer<Activation> {
    * @param bias  [in] bias term
    **/
   explicit linear_layer(serial_size_t dim,
-                        float_t scale = float_t{1},
-                        float_t bias  = float_t{0})
+                        float_t scale = float_t{1.0},
+                        float_t bias  = float_t{0.0})
     : Base({vector_type::data}), dim_(dim), scale_(scale), bias_(bias) {}
 
   std::vector<shape3d> in_shape() const override {

@@ -50,6 +50,10 @@ using namespace tiny_dnn::activation;
 #include "test_caffe_converter.h"
 #endif  // CNN_USE_CAFFE_CONVERTER
 
+#ifdef CNN_USE_HALF
+#include "test_half.h"
+#endif
+
 #ifdef DNN_USE_IMAGE_API
 #include "test_image.h"
 #endif  // DNN_USE_IMAGE_API

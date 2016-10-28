@@ -65,7 +65,7 @@ inline int uniform_idx(const Container &t) {
 }
 
 inline bool bernoulli(float_t p) {
-  return uniform_rand(float_t{0}, float_t{1}) <= p;
+  return uniform_rand(float_t{0.0}, float_t{1.0}) <= p;
 }
 
 template <typename Iter>

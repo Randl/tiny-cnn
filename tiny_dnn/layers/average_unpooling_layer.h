@@ -47,7 +47,7 @@ void tiny_average_unpooling_kernel(
       float_t bias   = b[d];
       for (size_t i = 0; i < oarea; ++i, ++idx) {
         const auto &connections = out2wi[idx];
-        float_t value{0};
+        float_t value{0.0};
         for (auto connection : connections) value += in[connection.second];
         value *= weight;
         value += bias;
@@ -95,7 +95,7 @@ void tiny_average_unpooling_back_kernel(
 
     for (size_t i = 0; i < weight2io.size(); ++i) {
       const auto &connections = weight2io[i];
-      float_t diff{0};
+      float_t diff{0.0};
 
       for (auto connection : connections)
         diff += prev_out[connection.first] * curr_delta[connection.second];
@@ -105,7 +105,7 @@ void tiny_average_unpooling_back_kernel(
 
     for (size_t i = 0; i < bias2out.size(); i++) {
       const std::vector<serial_size_t> &outs = bias2out[i];
-      float_t diff{0};
+      float_t diff{0.0};
 
       for (auto o : outs) diff += curr_delta[o];
 
@@ -137,7 +137,7 @@ class average_unpooling_layer : public partial_connected_layer<Activation> {
            in_width * in_height * in_channels * sqr(pooling_size),
            in_channels,
            in_channels,
-           float_t(1) * sqr(pooling_size)),
+           float_t(1.0) * sqr(pooling_size)),
       stride_(pooling_size),
       in_(in_width, in_height, in_channels),
       out_(in_width * pooling_size, in_height * pooling_size, in_channels),
@@ -163,7 +163,7 @@ class average_unpooling_layer : public partial_connected_layer<Activation> {
              unpool_out_dim(in_height, pooling_size, stride) * in_channels,
            in_channels,
            in_channels,
-           float_t(1) * sqr(pooling_size)),
+           float_t(1.0) * sqr(pooling_size)),
       stride_(stride),
       in_(in_width, in_height, in_channels),
       out_(unpool_out_dim(in_width, pooling_size, stride),

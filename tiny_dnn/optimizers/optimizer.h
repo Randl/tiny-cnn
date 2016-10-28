@@ -120,11 +120,11 @@ struct adam : public stateful_optimizer<2> {
     b2_t *= b2;
 
     for_i(parallelize, static_cast<int>(W.size()), [&](int i) {
-      mt[i] = b1 * mt[i] + (float_t(1) - b1) * dW[i];
-      vt[i] = b2 * vt[i] + (float_t(1) - b2) * dW[i] * dW[i];
+      mt[i] = b1 * mt[i] + (float_t(1.0) - b1) * dW[i];
+      vt[i] = b2 * vt[i] + (float_t(1.0) - b2) * dW[i] * dW[i];
 
-      W[i] -= alpha * (mt[i] / (float_t(1) - b1_t)) /
-              std::sqrt((vt[i] / (float_t(1) - b2_t)) + eps);
+      W[i] -= alpha * (mt[i] / (float_t(1.0) - b1_t)) /
+              std::sqrt((vt[i] / (float_t(1.0) - b2_t)) + eps);
     });
   }
 
@@ -164,7 +164,7 @@ struct gradient_descent : public optimizer {
  **/
 struct momentum : public stateful_optimizer<1> {
  public:
-  momentum() : alpha(float_t(0.01)), lambda(float_t{0}), mu(float_t(0.9)) {}
+  momentum() : alpha(float_t(0.01)), lambda(float_t{0.0}), mu(float_t(0.9)) {}
 
   void update(const vec_t &dW, vec_t &W, bool parallelize) {
     vec_t &dWprev = get<0>(W);
