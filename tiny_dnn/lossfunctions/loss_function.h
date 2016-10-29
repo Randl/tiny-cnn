@@ -26,7 +26,7 @@ class mse {
   static vec_t df(const vec_t &y, const vec_t &t) {
     assert(y.size() == t.size());
     vec_t d(t.size());
-    float_t factor = float_t(2) / static_cast<float_t>(t.size());
+    float_t factor = float_t(2.0) / static_cast<float_t>(t.size());
 
     for (serial_size_t i = 0; i < y.size(); ++i) d[i] = factor * (y[i] - t[i]);
 

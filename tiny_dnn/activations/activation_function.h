@@ -191,7 +191,7 @@ class tan_hp1m2 : public function {
     return ep / (ep + std::exp(-v[i]));
   }
 
-  float_t df(float_t y) const override { return 2 * y * (float_t(1) - y); }
+  float_t df(float_t y) const override { return 2 * y * (float_t(1.0) - y); }
   std::pair<float_t, float_t> scale() const override {
     return std::make_pair(float_t(0.1), float_t(0.9));
   }

@@ -38,7 +38,7 @@ class scalable : public function {
  **/
 class xavier : public scalable {
  public:
-  xavier() : scalable(float_t(6)) {}
+  xavier() : scalable(float_t(6.0)) {}
   explicit xavier(float_t value) : scalable(value) {}
 
   void fill(vec_t* weight,
@@ -105,7 +105,7 @@ class constant : public scalable {
 
 class he : public scalable {
  public:
-  he() : scalable(float_t{2}) {}
+  he() : scalable(float_t{2.0}) {}
   explicit he(float_t value) : scalable(value) {}
 
   void fill(vec_t* weight,

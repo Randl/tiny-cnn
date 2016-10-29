@@ -92,12 +92,12 @@ void serialization_test(T &src, T &dst) {
   vec_t v(src.in_data_size());
   uniform_rand(v.begin(), v.end(), -1.0f, 1.0f);
 
-  EXPECT_TRUE(src.has_same_weights(dst, 1E-5f));
+  EXPECT_TRUE(src.has_same_weights(dst, float_t{1E-5}));
 
   vec_t r1 = forward_pass(src, v);
   vec_t r2 = forward_pass(dst, v);
 
-  EXPECT_TRUE(is_near_container(r1, r2, 1E-4f));
+  EXPECT_TRUE(is_near_container(r1, r2, float_t{1E-4}));
 }
 
 template <typename T>

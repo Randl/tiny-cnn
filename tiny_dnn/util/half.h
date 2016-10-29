@@ -35,8 +35,10 @@ struct half;
 }
 namespace std {
 const tiny_dnn::half abs(const tiny_dnn::half &h);
-
-//TODO(Randl): exp, sqrt
+const tiny_dnn::half exp(const tiny_dnn::half &h);
+const tiny_dnn::half sqrt(const tiny_dnn::half &h);
+const tiny_dnn::half log(const tiny_dnn::half &h);
+//TODO(Randl): uniform_rand
 }
 
 namespace tiny_dnn {
@@ -45,18 +47,16 @@ constexpr uint_least16_t CNN_HALF_SIGN = 1 << 15;
 constexpr uint_least16_t CNN_HALF_EXPONENT = 0x1F << 10;
 constexpr uint_least16_t CNN_HALF_MANTISSA = 0x3FF;
 
-
-
 struct half {
 
   // Constructors
   explicit constexpr half() : _h() {};  // no initialization
-  explicit half(float f) : _h(_mm_cvtsi128_si32(_mm_cvtps_ph(_mm_set_ss(f),
-                                                             0))) {};
-  explicit half(double d)
-      : _h(_mm_cvtsi128_si32(_mm_cvtps_ph(_mm_set_ss(float(d)),
-                                          0))) {};
-  explicit half(uint_least16_t u) : _h(u) {};
+  half(float f) : _h(_mm_cvtsi128_si32(_mm_cvtps_ph(_mm_set_ss(f), 0))) {};
+  half(double d) : _h(_mm_cvtsi128_si32(_mm_cvtps_ph(_mm_set_ss(float(d)), 0))) {};
+  half(long double l) : _h(half(double(l))._h) {};
+  explicit half(uint_least16_t u, bool x) : _h(u) {};
+  half(uint_fast64_t u) : _h(half(double(u))._h) {};
+  half(int_fast64_t i) : _h(half(double(i))._h) {};
 
   // checks
   bool isFinite() const;
@@ -78,6 +78,8 @@ struct half {
   friend const half operator+(const half &left, const half &right);
   friend const half operator-(const half &left, const half &right);
   friend const half operator/(const half &left, const half &right);
+  friend const half operator/(const half &left, const uint_fast64_t &right);
+  friend const half operator/(const half &left, const int_fast64_t &right);
   friend const half operator*(const half &left, const half &right);
   friend const bool operator==(const half &left, const half &right);
   friend const bool operator!=(const half &left, const half &right);
@@ -106,7 +108,7 @@ half half::operator+() const {
   return *this;
 }
 half half::operator-() const {
-  return half(uint_least16_t(_h ^ CNN_HALF_SIGN));
+  return half(uint_least16_t(_h ^ CNN_HALF_SIGN), true);
 }
 bool half::operator!() const {
   return (_h & (~CNN_HALF_SIGN)) == 0;
@@ -138,6 +140,12 @@ const half operator-(const half &left, const half &right) {
 const half operator/(const half &left, const half &right) {
   auto z = _mm_cvtph_ps(_mm_set_epi16(0, 0, 0, 0, 0, 0, right._h, left._h));
   return half(z[0] / z[1]);
+}
+const half operator/(const half &left, const uint_fast64_t &right) {
+  return half(float(left) / right);
+}
+const half operator/(const half &left, const int_fast64_t &right) {
+  return half(float(left) / right);
 }
 const half operator*(const half &left, const half &right) {
   auto z = _mm_cvtph_ps(_mm_set_epi16(0, 0, 0, 0, 0, 0, right._h, left._h));
@@ -226,6 +234,24 @@ half operator ""_h(long double d) {
 
 namespace std {
 const tiny_dnn::half abs(const tiny_dnn::half &h) {
-  return tiny_dnn::half(uint_least16_t(h._h & (~tiny_dnn::CNN_HALF_SIGN)));
+  return tiny_dnn::half(uint_least16_t(h._h & (~tiny_dnn::CNN_HALF_SIGN)), true);
 }
+
+const tiny_dnn::half exp(const tiny_dnn::half &h) {
+  return tiny_dnn::half(exp(static_cast<float>(h)));
+}
+const tiny_dnn::half sqrt(const tiny_dnn::half &h) {
+  return tiny_dnn::half(sqrt(static_cast<float>(h)));
+}
+
+const tiny_dnn::half log(const tiny_dnn::half &h){
+  return tiny_dnn::half(log(static_cast<float>(h)));
+}
+
+template<>
+struct is_floating_point<tiny_dnn::half> : std::integral_constant<bool, true> {};
+template<>
+struct is_arithmetic<tiny_dnn::half> : std::integral_constant<bool, true> {};
+template<>
+struct is_signed<tiny_dnn::half> : std::integral_constant<bool, true> {};
 }

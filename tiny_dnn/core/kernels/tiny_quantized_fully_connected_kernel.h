@@ -73,11 +73,11 @@ inline void tiny_quantized_fully_connected_kernel(
 
   // calculating offset
   const int32_t offset_input =
-    float_to_quantized_unclamped<uint8_t>(0.0f, min_input, max_input);
+    float_to_quantized_unclamped<uint8_t>(float_t{0.0}, min_input, max_input);
   const int32_t offset_filter =
-    float_to_quantized_unclamped<uint8_t>(0.0f, min_filter, max_filter);
+    float_to_quantized_unclamped<uint8_t>(float_t{0.0}, min_filter, max_filter);
   const int32_t zero_in_total_space =
-    float_to_quantized<int32_t>(0.0f, min_output_value, max_output_value);
+    float_to_quantized<int32_t>(float_t{0.0}, min_output_value, max_output_value);
 
   const int32_t offset_output = 0;
   const int32_t mult_output   = 1;
