@@ -81,10 +81,10 @@ TEST(quantized_convolutional, fprop) {
 
   // clang-format off
     weight[0] = 0.3f;  weight[1] = 0.1f; weight[2] = 0.2f;
-    weight[3] = 0.0f;  weight[4] = -0.1f; weight[5] = -0.1f;
+    weight[3] = float_t(0.0);  weight[4] = -0.1f; weight[5] = -0.1f;
     weight[6] = 0.05f; weight[7] = -0.2f; weight[8] = 0.05f;
 
-    weight[9] = 0.0f; weight[10] = -0.1f; weight[11] = 0.1f;
+    weight[9] = float_t(0.0); weight[10] = -0.1f; weight[11] = 0.1f;
     weight[12] = 0.1f; weight[13] = -0.2f; weight[14] = 0.3f;
     weight[15] = 0.2f; weight[16] = -0.3f; weight[17] = 0.2f;
 

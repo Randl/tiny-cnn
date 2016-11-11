@@ -61,7 +61,7 @@ void train_network(network<sequential> nn, const string &train_dir_path) {
   std::vector<vec_t> training_images_corrupted(train_images);
 
   for (auto &d : training_images_corrupted) {
-    d = corrupt(move(d), 0.1f, 0.0f);  // corrupt 10% data
+    d = corrupt(move(d), 0.1f, float_t(0.0));  // corrupt 10% data
   }
 
   gradient_descent optimizer;

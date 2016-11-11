@@ -51,7 +51,7 @@ struct half {
 
   // Constructors
   constexpr half() : _h() {};  // no initialization
-  half(float f) : _h(_mm_cvtsi128_si32(_mm_cvtps_ph(_mm_set_ss(f), 0))) {};
+  explicit half(float f) : _h(_mm_cvtsi128_si32(_mm_cvtps_ph(_mm_set_ss(f), 0))) {};
   //half(double d) : _h(_mm_cvtsi128_si32(_mm_cvtps_ph(_mm_set_ss(float(d)), 0))) {};
   //half(long double l) : _h(half(double(l))._h) {};
   explicit half(uint_least16_t u, bool x) : _h(u) {};
@@ -92,11 +92,14 @@ struct half {
   friend std::ostream &operator<<(std::ostream &os, const half &h);
   friend std::istream &operator>>(std::istream &is, half &h);
 
+  friend const half abs(const half &);
+
   operator double() const;
- /* operator float() const;
-  operator int() const;
-  operator bool() const;
-  operator uint8_t() const;*/
+  explicit operator float() const;
+  explicit operator int64_t() const;
+  explicit operator int32_t() const;
+  explicit operator bool() const;
+  explicit operator uint8_t() const;
 
   // operations
   friend const half std::abs(const half &h);
@@ -193,19 +196,22 @@ std::istream &operator>>(std::istream &is, half &h) {
 
 half::operator double() const {
   return _mm_cvtss_f32(_mm_cvtph_ps(_mm_cvtsi32_si128(_h)));
-}/*
+}
 half::operator float() const {
   return _mm_cvtss_f32(_mm_cvtph_ps(_mm_cvtsi32_si128(_h)));
 }
-half::operator int() const {
-  return int(float(*this));
+half::operator int64_t() const {
+  return int64_t(float(*this));
+}
+half::operator int32_t() const {
+  return int32_t(float(*this));
 }
 half::operator bool() const {
   return (_h & (~CNN_HALF_SIGN)) != 0;
 }
 half::operator uint8_t() const {
   return uint8_t(float(*this));
-}*/
+}
 
 bool half::isFinite() const {
   return ((_h & CNN_HALF_EXPONENT) ^ CNN_HALF_EXPONENT) != 0;
@@ -234,23 +240,37 @@ half operator ""_h(long double d) {
   return half(double(d));
 }
 
+const half abs(const half &h) {
+  return half(uint_least16_t(h._h & (~tiny_dnn::CNN_HALF_SIGN)), true);
+}
+
+const half exp(const half &h) {
+  return half(exp(h));
+}
+const half sqrt(const half &h) {
+  return half(sqrt(h));
+}
+
+const half log(const half &h){
+  return half(log(h));
+}
+
+const half round(const half &h){
+  return half(round(h));
+}
+
+const half ceil(const half &h){
+  return half(ceil(h));
+}
+
+const half pow(const half &h1, const half &h2) {
+  return half(pow(h1,h2));
+}
+
+
 }
 
 namespace std {
-const tiny_dnn::half abs(const tiny_dnn::half &h) {
-  return tiny_dnn::half(uint_least16_t(h._h & (~tiny_dnn::CNN_HALF_SIGN)), true);
-}
-
-const tiny_dnn::half exp(const tiny_dnn::half &h) {
-  return tiny_dnn::half(exp(static_cast<float>(h)));
-}
-const tiny_dnn::half sqrt(const tiny_dnn::half &h) {
-  return tiny_dnn::half(sqrt(static_cast<float>(h)));
-}
-
-const tiny_dnn::half log(const tiny_dnn::half &h){
-  return tiny_dnn::half(log(static_cast<float>(h)));
-}
 
 template<>
 struct is_floating_point<tiny_dnn::half> : std::integral_constant<bool, true> {};

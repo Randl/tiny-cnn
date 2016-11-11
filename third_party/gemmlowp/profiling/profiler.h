@@ -178,7 +178,7 @@ class ProfileTreeView {
       for (int i = 1; i < level; i++) {
         printf("    ");
       }
-      printf("%.2f%% %s\n", 100.0f * node->weight / root_.weight, node->label);
+      printf("%.2f%% %s\n", 10float_t(0.0) * node->weight / root_.weight, node->label);
     }
     for (auto child : node->children) {
       PrintNode(child, level + 1);

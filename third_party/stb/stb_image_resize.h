@@ -797,7 +797,7 @@ STBIRDEF float stbir__filter_cubic(float x, float s)
     else if (x < 2.0f)
         return (8 + x*(-12 + x*(6 - x)))/6;
 
-    return (0.0f);
+    return (float_t(0.0));
 }
 
 STBIRDEF float stbir__filter_catmullrom(float x, float s)
@@ -811,7 +811,7 @@ STBIRDEF float stbir__filter_catmullrom(float x, float s)
     else if (x < 2.0f)
         return 2 - x*(4 + x*(0.5f*x - 2.5f));
 
-    return (0.0f);
+    return (float_t(0.0));
 }
 
 STBIRDEF float stbir__filter_mitchell(float x, float s)
@@ -825,7 +825,7 @@ STBIRDEF float stbir__filter_mitchell(float x, float s)
     else if (x < 2.0f)
         return (32 + x*(-60 + x*(36 - 7*x)))/18;
 
-    return (0.0f);
+    return (float_t(0.0));
 }
 
 STBIRDEF float stbir__support_zero(float s)

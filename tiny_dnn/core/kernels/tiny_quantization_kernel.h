@@ -151,15 +151,15 @@ inline void requantize_many_in_new_range<int32_t, uint8_t>(int32_t *input,
   const int fp_shift             = 16;
   const float input_range        = max_input - min_input;
   const float output_range       = max_output - min_output;
-  const float recip_output_range = (255.0f / output_range);
+  const float recip_output_range = (float_t(255.0) / output_range);
   const int64_t recip_output_range_fp =
     static_cast<int64_t>(recip_output_range * (1 << fp_shift));
   const int64_t range_scale_fp =
-    static_cast<int64_t>(255.0f * (1 << fp_shift) * input_range / output_range);
+    static_cast<int64_t>(float_t(255.0) * (1 << fp_shift) * input_range / output_range);
   const int64_t input_offset_fp = static_cast<int64_t>(
     (min_input * recip_output_range_fp) + (range_scale_fp >> 1));
   const int64_t output_offset_fp =
-    static_cast<int64_t>(round((min_output * 255.0f) / output_range));
+    static_cast<int64_t>(round((min_output * float_t(255.0)) / output_range));
   const int64_t rounding_delta = 1 << (fp_shift - 1);
   // Inside this loop we just do minimal adds, multiplies, and shifts, in a
   // way
@@ -242,7 +242,7 @@ void quantize_down_and_shrink_range(std::vector<T1> &input,
   // We want to make sure that the minimum is no larger than zero, so that the
   // convolution operation can run efficiently.
   *min_new = std::min(
-    0.0f, quantized_to_float(actual_min_quantized, min_input, max_input));
+      float_t(0.0), quantized_to_float(actual_min_quantized, min_input, max_input));
   *max_new = quantized_to_float(actual_max_quantized, min_input, max_input);
   requantize_many_in_new_range<int32_t, uint8_t>(&input[0], input.size(),
                                                  min_input, max_input, *min_new,

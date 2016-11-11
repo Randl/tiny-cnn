@@ -188,13 +188,13 @@ inline void tiny_quantized_fully_connected_back_kernel(
 
   // calculating offset
   const int32_t offset_prev_out =
-    float_to_quantized_unclamped<uint8_t>(0.0f, min_prev_out, max_prev_out);
+    float_to_quantized_unclamped<uint8_t>(float_t(0.0), min_prev_out, max_prev_out);
   const int32_t offset_filter =
-    float_to_quantized_unclamped<uint8_t>(0.0f, min_filter, max_filter);
+    float_to_quantized_unclamped<uint8_t>(float_t(0.0), min_filter, max_filter);
   const int32_t offset_curr_delta =
-    float_to_quantized_unclamped<uint8_t>(0.0f, min_curr_delta, max_curr_delta);
+    float_to_quantized_unclamped<uint8_t>(float_t(0.0), min_curr_delta, max_curr_delta);
   // const int32_t zero_in_prev_delta =
-  //    float_to_quantized<int32_t>(0.0f, min_prev_delta_value,
+  //    float_to_quantized<int32_t>(float_t(0.0), min_prev_delta_value,
   //    max_prev_delta_value);
 
   for (serial_size_t c = 0; c < params.in_size_; c++) {
@@ -313,11 +313,11 @@ inline void tiny_quantized_fully_connected_kernel(
 
   // calculating offset
   const int32_t offset_input =
-    float_to_quantized_unclamped<uint8_t>(0.0f, in_r[0], in_r[1]);
+    float_to_quantized_unclamped<uint8_t>(float_t(0.0), in_r[0], in_r[1]);
   const int32_t offset_filter =
-    float_to_quantized_unclamped<uint8_t>(0.0f, min_filter, max_filter);
+    float_to_quantized_unclamped<uint8_t>(float_t(0.0), min_filter, max_filter);
   const int32_t zero_in_total_space =
-    float_to_quantized<int32_t>(0.0f, min_output_value, max_output_value);
+    float_to_quantized<int32_t>(float_t(0.0), min_output_value, max_output_value);
 
   const int32_t offset_output = 0;
   const int32_t mult_output   = 1;

@@ -42,6 +42,10 @@
 #endif
 #endif
 
+#if defined(CNN_USE_HALF)
+#include "tiny_dnn/util/half.h"
+#endif
+
 namespace tiny_dnn {
 
 ///< output label(class-index) for classification

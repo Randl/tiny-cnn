@@ -174,24 +174,24 @@ TEST(batchnorm, forward) {
   // clang-format off
     tensor_t in = {
       {
-         0.0f,  0.0f,  0.0f,  0.0f, // ch-0 of data#0
-        -4.0f,  0.0f, -1.0f,  2.0f, // ch-1 of data#0
-         1.0f,  0.0f,  1.0f,  3.0f, // ch-2 of data#0
+         float_t(0.0),  float_t(0.0),  float_t(0.0),  float_t(0.0), // ch-0 of data#0
+        -4.0f,  float_t(0.0), -1.0f,  2.0f, // ch-1 of data#0
+         1.0f,  float_t(0.0),  1.0f,  3.0f, // ch-2 of data#0
       }, {
-         0.0f,  0.0f,  0.0f,  0.0f,  // ch-0 of data#1  
-         2.0f,  0.0f, -4.0f, -3.0f,  // ch-1 of data#1
-         2.0f,  5.0f,  1.0f, 10.0f   // ch-2 of data#1
+         float_t(0.0),  float_t(0.0),  float_t(0.0),  float_t(0.0),  // ch-0 of data#1
+         2.0f,  float_t(0.0), -4.0f, -3.0f,  // ch-1 of data#1
+         2.0f,  5.0f,  1.0f, 1float_t(0.0)   // ch-2 of data#1
       }
     };
 
     /* y = (x - mean) ./ sqrt(variance + eps) */
     tensor_t expect = {
         {
-            0.0f,    0.0f,    0.0f,   0.0f,   // ch-0 of data#0
-           -1.225f,  0.408f,  0.0f,   1.225f, // ch-1 of data#0
+            float_t(0.0),    float_t(0.0),    float_t(0.0),   float_t(0.0),   // ch-0 of data#0
+           -1.225f,  0.408f,  float_t(0.0),   1.225f, // ch-1 of data#0
            -0.573f, -0.879f, -0.573f, 0.038f, // ch-2 of data#0
         },{
-            0.0f,   0.0f,    0.0f,    0.0f,  // ch-0 of data#1  
+            float_t(0.0),   float_t(0.0),    float_t(0.0),    float_t(0.0),  // ch-0 of data#1
             1.225f, 0.408f, -1.225f, -0.816f,  // ch-1 of data#1
            -0.268f, 0.650f, -0.573f,  2.179f   // ch-2 of data#1
         }

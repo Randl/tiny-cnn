@@ -45,8 +45,8 @@ __kernel void CFMulti(__global Dtype* image_data, int_tp image_offset,
     Dtype4 vectorSum[ZPAR];
     for(int_tp kern =0; kern < ZPAR; kern++)
     {
-      sum[kern] = 0.0f;
-      vectorSum[kern] = (0.0f,0.0f,0.0f,0.0f);
+      sum[kern] = float_t(0.0);
+      vectorSum[kern] = (float_t(0.0),float_t(0.0),float_t(0.0),float_t(0.0));
     }
 
     const int_tp currentKernelOffset = kernel_offset + kernelNum*KERNEL_H*KERNEL_W*CHANNELS;
@@ -136,7 +136,7 @@ __kernel void CFMulti_11_11_4(__global Dtype* image_data, int_tp image_offset,
     Dtype sum[XPAR*YPAR*ZPAR];
     for(int_tp kern =0; kern < XPAR*YPAR*ZPAR; kern++)
     {
-      sum[kern] = 0.0f;
+      sum[kern] = float_t(0.0);
     }
 
     int_tp currentKernelOffset = kernel_offset + kernelNum*KERNELSIZE*CHANNELS;
@@ -226,7 +226,7 @@ __kernel void CFMulti_6(__global const Dtype* restrict image_data, const int_tp 
   {
     Dtype sum[XPAR*YPAR*ZPAR];
     for(uint_tp kern = 0; kern < XPAR*YPAR*ZPAR; kern++)
-    sum[kern] = 0.0f;
+    sum[kern] = float_t(0.0);
 
     const int_tp currentKernelOffset = kernel_offset + kernelNum*KERNELSIZE*CHANNELS;
     const int_tp biasIndex=bias_offset + kernelNum;
@@ -391,7 +391,7 @@ convolve_simd16(  // __global float *inputs, __global float* weights, __global f
   uint_tp weight_addr = (fmg % (_OD/SIMD_SIZE)) * INPUT_DEPTH * KERNEL * KERNEL * SIMD_SIZE + lid;
 
   for(int_tp i=0;i<OUT_BLOCK_SIZE;i++) {
-    out[i]=0.0f;
+    out[i]=float_t(0.0);
   }
 
   uint_tp num_in_batch = fm / _OD;
@@ -562,7 +562,7 @@ convolve_simd16(  // __global float *inputs, __global float* weights, __global f
   uint_tp weight_addr = (fmg % (_OD/SIMD_SIZE)) * INPUT_DEPTH * KERNEL * KERNEL * SIMD_SIZE + lid;
 
   for(int_tp i=0;i<OUT_BLOCK_SIZE;i++) {
-    out[i]=0.0f;
+    out[i]=float_t(0.0);
   }
 
   uint_tp num_in_batch = ( fm ) / _OD;

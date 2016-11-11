@@ -99,7 +99,7 @@ class Event {
 
   // Retrieves the elapsed time of the last recorded event
   float GetElapsedTime() const {
-    auto result = 0.0f;
+    auto result = float_t(0.0);
     cuEventElapsedTime(&result, *start_, *end_);
     return result;
   }

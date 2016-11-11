@@ -77,11 +77,11 @@ inline void tiny_quantized_conv2d_kernel(const conv_params &params,
 
   // calculating offset
   const int32_t offset_input = int64_to_int32(
-    float_to_quantized_unclamped<uint8_t>(0.0f, min_input, max_input));
+    float_to_quantized_unclamped<uint8_t>(float_t(0.0), min_input, max_input));
   const int32_t offset_filter = int64_to_int32(
-    float_to_quantized_unclamped<uint8_t>(0.0f, min_filter, max_filter));
+    float_to_quantized_unclamped<uint8_t>(float_t(0.0), min_filter, max_filter));
   const int32_t zero_in_total_space = int64_to_int32(
-    float_to_quantized<int32_t>(0.0f, min_output_value, max_output_value));
+    float_to_quantized<int32_t>(float_t(0.0), min_output_value, max_output_value));
 
   for_i(layer_parallelize, params.out.depth_, [&](int o) {
     for (serial_size_t inc = 0; inc < params.in.depth_; inc++) {
@@ -219,14 +219,14 @@ inline void tiny_quantized_conv2d_back_kernel(const conv_params &params,
 
   // calculating offset
   const int32_t offset_prev_out = int64_to_int32(
-    float_to_quantized_unclamped<uint8_t>(0.0f, min_prev_out, max_prev_out));
+    float_to_quantized_unclamped<uint8_t>(float_t(0.0), min_prev_out, max_prev_out));
   const int32_t offset_filter = int64_to_int32(
-    float_to_quantized_unclamped<uint8_t>(0.0f, min_filter, max_filter));
+    float_to_quantized_unclamped<uint8_t>(float_t(0.0), min_filter, max_filter));
   const int32_t offset_curr_delta =
-    int64_to_int32(float_to_quantized_unclamped<uint8_t>(0.0f, min_curr_delta,
+    int64_to_int32(float_to_quantized_unclamped<uint8_t>(float_t(0.0), min_curr_delta,
                                                          max_curr_delta));
   // const int32_t zero_in_prev_delta =
-  //    float_to_quantized<int32_t>(0.0f, min_prev_delta_value,
+  //    float_to_quantized<int32_t>(float_t(0.0), min_prev_delta_value,
   //    max_prev_delta_value);
 
   // propagate delta to previous layer
@@ -399,11 +399,11 @@ inline void tiny_quantized_conv2d_kernel(const conv_params &params,
 
   // calculating offset
   const int32_t offset_input = int64_to_int32(
-    float_to_quantized_unclamped<uint8_t>(0.0f, in_r[0], in_r[1]));
+    float_to_quantized_unclamped<uint8_t>(float_t(0.0), in_r[0], in_r[1]));
   const int32_t offset_filter = int64_to_int32(
-    float_to_quantized_unclamped<uint8_t>(0.0f, min_filter, max_filter));
+    float_to_quantized_unclamped<uint8_t>(float_t(0.0), min_filter, max_filter));
   const int32_t zero_in_total_space = int64_to_int32(
-    float_to_quantized<int32_t>(0.0f, min_output_value, max_output_value));
+    float_to_quantized<int32_t>(float_t(0.0), min_output_value, max_output_value));
 
   for_i(layer_parallelize, params.out.depth_, [&](int o) {
     for (serial_size_t inc = 0; inc < params.in.depth_; inc++) {

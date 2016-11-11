@@ -32,7 +32,7 @@ TEST(image, copy_ctor) {
   image<uint8_t> src(a, 3, 1, image_type::grayscale);
   image<float> dst(src);
 
-  EXPECT_FLOAT_EQ(0.0f, dst.at(0, 0));
+  EXPECT_FLOAT_EQ(float_t(0.0), dst.at(0, 0));
   EXPECT_FLOAT_EQ(127.0f, dst.at(1, 0));
   EXPECT_FLOAT_EQ(255.0f, dst.at(2, 0));
 }
@@ -95,8 +95,8 @@ TEST(image, create_zero_filled_uint8) {
 TEST(image, create_zero_filled_float) {
   image<float> img(shape3d(3, 2, 1), image_type::grayscale);
 
-  EXPECT_FLOAT_EQ(0.0f, img.at(0, 0));
-  EXPECT_FLOAT_EQ(0.0f, img.at(2, 1));
+  EXPECT_FLOAT_EQ(float_t(0.0), img.at(0, 0));
+  EXPECT_FLOAT_EQ(float_t(0.0), img.at(2, 1));
 }
 
 TEST(image, copy) {
