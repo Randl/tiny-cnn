@@ -88,11 +88,11 @@ TEST(quantized_convolutional, fprop) {
     weight[12] = 0.1f; weight[13] = -0.2f; weight[14] = 0.3f;
     weight[15] = 0.2f; weight[16] = -0.3f; weight[17] = 0.2f;
 
-    in[0] = 3;  in[1] = 2;  in[2] = 1;  in[3] = 5; in[4] = 2;
-    in[5] = 3;  in[6] = 0;  in[7] = 2;  in[8] = 0; in[9] = 1;
-    in[10] = 0; in[11] = 6; in[12] = 1; in[13] = 1; in[14] = 10;
-    in[15] = 3; in[16] =-1; in[17] = 2; in[18] = 9; in[19] = 0;
-    in[20] = 1; in[21] = 2; in[22] = 1; in[23] = 5; in[24] = 5;
+    in[0] =  3.;  in[1] =  2.;  in[2] = 1.;  in[3] = 5.; in[4] = 2.;
+    in[5] =  3.;  in[6] =  0.;  in[7] = 2.;  in[8] = 0.; in[9] = 1.;
+    in[10] = 0.; in[11] =  6.; in[12] = 1.; in[13] = 1.; in[14] = 10.;
+    in[15] = 3.; in[16] = -1.; in[17] = 2.; in[18] = 9.; in[19] = 0.;
+    in[20] = 1.; in[21] =  2.; in[22] = 1.; in[23] = 5.; in[24] = 5.;
 
     {
         l.forward_propagation(in_data, out_data);

@@ -143,7 +143,7 @@ class Conv2dOpenCLForwardOp : public core::OpKernel {
       nn_info(" > Took " + to_string(event.GetElapsedTime()) + " ms");
 
       // Upload data GPU -> CPU
-      std::vector<float_t> out(out_data[i].size(), 0);
+      std::vector<float_t> out(out_data[i].size(), float_t{0.0});
       dev_out.Read(queue, out_data[i].size(), out);
 
       // FOR DEBUG ONLY

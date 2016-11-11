@@ -45,8 +45,8 @@ inline void tiny_quantized_deconv2d_kernel(const deconv_params &params,
     }
   }
   if (min_filter == max_filter) {
-    max_filter = W[0] + 1e-3f;
-    min_filter = W[0] - 1e-3f;
+    max_filter = W[0] + float_t{1e-3};
+    min_filter = W[0] - float_t{1e-3};
   }
   std::vector<uint8_t> W_quantized =
     float_tensor_to_quantized<uint8_t>(W, min_filter, max_filter);
@@ -60,8 +60,8 @@ inline void tiny_quantized_deconv2d_kernel(const deconv_params &params,
       max_bias = std::max(max_bias, bias[inc]);
     }
     if (min_bias == max_bias) {
-      max_bias = bias[0] + 1e-3f;
-      min_bias = bias[0] - 1e-3f;
+      max_bias = bias[0] + float_t{1e-3};
+      min_bias = bias[0] - float_t{1e-3};
     }
     bias_quantized =
       float_tensor_to_quantized<uint8_t>(bias, min_bias, max_bias);
@@ -175,8 +175,8 @@ inline void tiny_quantized_deconv2d_back_kernel(const deconv_params &params,
     }
   }
   if (min_filter == max_filter) {
-    max_filter = W[0] + 1e-3f;
-    min_filter = W[0] - 1e-3f;
+    max_filter = W[0] + float_t(1e-3);
+    min_filter = W[0] - float_t(1e-3);
   }
   std::vector<uint8_t> W_quantized =
     float_tensor_to_quantized<uint8_t>(W, min_filter, max_filter);
@@ -361,16 +361,16 @@ inline void tiny_quantized_deconv2d_kernel(const deconv_params &params,
   float_t min_filter(W_r[0]);
   float_t max_filter(W_r[1]);
   if (W_r[0] == W_r[1]) {
-    max_filter = W_r[1] + 1e-3f;
-    min_filter = W_r[0] - 1e-3f;
+    max_filter = W_r[1] + float_t(1e-3);
+    min_filter = W_r[0] - float_t(1e-3);
   }
   // bias range
   float_t min_bias(b_r[0]);
   float_t max_bias(b_r[1]);
   if (params.has_bias) {
     if (min_bias == max_bias) {
-      max_bias = b_r[1] + 1e-3f;
-      min_bias = b_r[0] - 1e-3f;
+      max_bias = b_r[1] + float_t(1e-3);
+      min_bias = b_r[0] - float_t(1e-3);
     }
   }
   // output range

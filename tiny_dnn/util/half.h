@@ -50,13 +50,13 @@ constexpr uint_least16_t CNN_HALF_MANTISSA = 0x3FF;
 struct half {
 
   // Constructors
-  explicit constexpr half() : _h() {};  // no initialization
+  constexpr half() : _h() {};  // no initialization
   half(float f) : _h(_mm_cvtsi128_si32(_mm_cvtps_ph(_mm_set_ss(f), 0))) {};
-  half(double d) : _h(_mm_cvtsi128_si32(_mm_cvtps_ph(_mm_set_ss(float(d)), 0))) {};
-  half(long double l) : _h(half(double(l))._h) {};
+  //half(double d) : _h(_mm_cvtsi128_si32(_mm_cvtps_ph(_mm_set_ss(float(d)), 0))) {};
+  //half(long double l) : _h(half(double(l))._h) {};
   explicit half(uint_least16_t u, bool x) : _h(u) {};
-  half(uint_fast64_t u) : _h(half(double(u))._h) {};
-  half(int_fast64_t i) : _h(half(double(i))._h) {};
+  /*half(uint_fast64_t u) : _h(half(double(u))._h) {};
+  half(int_fast64_t i) : _h(half(double(i))._h) {};*/
 
   // checks
   bool isFinite() const;
@@ -78,8 +78,8 @@ struct half {
   friend const half operator+(const half &left, const half &right);
   friend const half operator-(const half &left, const half &right);
   friend const half operator/(const half &left, const half &right);
-  friend const half operator/(const half &left, const uint_fast64_t &right);
-  friend const half operator/(const half &left, const int_fast64_t &right);
+  //friend const half operator/(const half &left, const uint_fast64_t &right);
+  //friend const half operator/(const half &left, const int_fast64_t &right);
   friend const half operator*(const half &left, const half &right);
   friend const bool operator==(const half &left, const half &right);
   friend const bool operator!=(const half &left, const half &right);
@@ -93,9 +93,10 @@ struct half {
   friend std::istream &operator>>(std::istream &is, half &h);
 
   operator double() const;
-  operator float() const;
+ /* operator float() const;
   operator int() const;
   operator bool() const;
+  operator uint8_t() const;*/
 
   // operations
   friend const half std::abs(const half &h);
@@ -141,12 +142,12 @@ const half operator/(const half &left, const half &right) {
   auto z = _mm_cvtph_ps(_mm_set_epi16(0, 0, 0, 0, 0, 0, right._h, left._h));
   return half(z[0] / z[1]);
 }
-const half operator/(const half &left, const uint_fast64_t &right) {
+/*const half operator/(const half &left, const uint_fast64_t &right) {
   return half(float(left) / right);
 }
 const half operator/(const half &left, const int_fast64_t &right) {
   return half(float(left) / right);
-}
+}*/
 const half operator*(const half &left, const half &right) {
   auto z = _mm_cvtph_ps(_mm_set_epi16(0, 0, 0, 0, 0, 0, right._h, left._h));
   return half(z[0] * z[1]);
@@ -192,7 +193,7 @@ std::istream &operator>>(std::istream &is, half &h) {
 
 half::operator double() const {
   return _mm_cvtss_f32(_mm_cvtph_ps(_mm_cvtsi32_si128(_h)));
-}
+}/*
 half::operator float() const {
   return _mm_cvtss_f32(_mm_cvtph_ps(_mm_cvtsi32_si128(_h)));
 }
@@ -202,6 +203,9 @@ half::operator int() const {
 half::operator bool() const {
   return (_h & (~CNN_HALF_SIGN)) != 0;
 }
+half::operator uint8_t() const {
+  return uint8_t(float(*this));
+}*/
 
 bool half::isFinite() const {
   return ((_h & CNN_HALF_EXPONENT) ^ CNN_HALF_EXPONENT) != 0;

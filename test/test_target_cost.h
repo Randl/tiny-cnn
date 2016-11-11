@@ -134,7 +134,7 @@ TEST(target_cost, create_balanced_target_cost_0_5) {
       }
 
       EXPECT_NEAR(label_cost,
-                  (1 - w) * expected_weight_w_0 + w * expected_weight_w_1,
+                  (1.0 - w) * expected_weight_w_0 + w * expected_weight_w_1,
                   1e-6);
     }
   }
@@ -178,7 +178,7 @@ TEST(target_cost, train_unbalanced_data_1dim) {
 
   {  // some simple checks
     const float_t p_label1 =
-      p0 * (1 - p) + p1 * p;  // p(label == 1) = p(label == 1 | in == 0) * p(in
+      p0 * (1.0 - p) + p1 * p;  // p(label == 1) = p(label == 1 | in == 0) * p(in
                               // == 0) + p(label == 1 | in == 1) * p(in == 1)
     const serial_size_t n_label1 = std::accumulate(
       labels.begin(), labels.end(), static_cast<serial_size_t>(0));
