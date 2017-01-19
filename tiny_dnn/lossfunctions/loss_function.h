@@ -86,7 +86,7 @@ class absolute_eps {
     assert(y.size() == t.size());
     vec_t d(t.size());
     const float_t factor = float_t(1.0) / static_cast<float_t>(t.size());
-    const float_t eps    = float_t(1.0) / fraction;
+    const float_t eps    = float_t(1.0) / static_cast<float_t>(fraction);
 
     for (serial_size_t i = 0; i < y.size(); ++i) {
       float_t sign = y[i] - t[i];
@@ -95,7 +95,7 @@ class absolute_eps {
       else if (sign > eps)
         d[i] = factor;
       else
-        d[i] = 0.f;
+        d[i] = float_t{0.0};
     }
     return d;
   }

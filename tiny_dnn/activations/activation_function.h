@@ -38,7 +38,7 @@ class function {
 
   // dfi/dyk (k=0,1,..n)
   virtual vec_t df(const vec_t &y, size_t i) const {
-    vec_t v(y.size(), 0);
+    vec_t v(y.size(), float_t{0.0});
     v[i] = df(y[i]);
     return v;
   }
@@ -191,7 +191,7 @@ class tan_hp1m2 : public function {
     return ep / (ep + std::exp(-v[i]));
   }
 
-  float_t df(float_t y) const override { return 2 * y * (float_t(1.0) - y); }
+  float_t df(float_t y) const override { return float_t(2.0) * y * (float_t(1.0) - y); }
   std::pair<float_t, float_t> scale() const override {
     return std::make_pair(float_t(0.1), float_t(0.9));
   }
