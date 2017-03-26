@@ -34,28 +34,50 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 using namespace tiny_dnn;
 using namespace tiny_dnn::activation;
 
+// http://torch.ch/blog/2015/07/30/cifar.html
 template <typename N>
 void construct_net(N &nn, core::backend_t backend_type) {
-  typedef convolutional_layer<activation::identity> conv;
-  typedef max_pooling_layer<relu> pool;
+  using conv       = convolutional_layer<activation::identity>;
+  using relu_conv  = convolutional_layer<activation::relu>;
+  using pool       = max_pooling_layer<relu>;
+  using dropout    = dropout_layer;
+  using batch_norm = batch_normalization_layer;
+  using relu_fc    = fully_connected_layer<activation::relu>;
+  using fc         = fully_connected_layer<activation::identity>;
 
   const serial_size_t n_fmaps = 32;  ///< number of feature maps for upper layer
   const serial_size_t n_fmaps2 =
     64;  ///< number of feature maps for lower layer
   const serial_size_t n_fc =
     64;  ///< number of hidden units in fully-connected layer
-
-  nn << conv(32, 32, 5, 3, n_fmaps, padding::same, true, 1, 1, backend_type)
-     << pool(32, 32, n_fmaps, 2, backend_type)
-     << conv(16, 16, 5, n_fmaps, n_fmaps, padding::same, true, 1, 1,
-             backend_type)
-     << pool(16, 16, n_fmaps, 2, backend_type)
-     << conv(8, 8, 5, n_fmaps, n_fmaps2, padding::same, true, 1, 1,
-             backend_type)
-     << pool(8, 8, n_fmaps2, 2, backend_type)
-     << fully_connected_layer<activation::identity>(4 * 4 * n_fmaps2, n_fc,
-                                                    true, backend_type)
-     << fully_connected_layer<softmax>(n_fc, 10, true, backend_type);
+  // TODO(Randl): ReLU after BatchNorm
+  nn << relu_conv(32, 32, 3, 3, 64, padding::same, true, 1, 1, backend_type)
+     << batch_norm(32 * 32, 64, 1e-3) << dropout(32 * 32 * 64, 0.3)
+     << relu_conv(32, 32, 3, 64, 64, padding::same, true, 1, 1, backend_type)
+     << batch_norm(32 * 32, 64, 1e-3) << pool(32, 32, 64, 2, backend_type)
+     << relu_conv(16, 16, 3, 64, 128, padding::same, true, 1, 1, backend_type)
+     << batch_norm(16 * 16, 128, 1e-3) << dropout(16 * 16 * 128, 0.4)
+     << relu_conv(16, 16, 3, 128, 128, padding::same, true, 1, 1, backend_type)
+     << batch_norm(16 * 16, 128, 1e-3) << pool(16, 16, 128, 2, backend_type)
+     << relu_conv(8, 8, 3, 128, 256, padding::same, true, 1, 1, backend_type)
+     << batch_norm(8 * 8, 256, 1e-3) << dropout(8 * 8 * 256, 0.4)
+     << relu_conv(8, 8, 3, 256, 256, padding::same, true, 1, 1, backend_type)
+     << batch_norm(8 * 8, 256, 1e-3) << dropout(8 * 8 * 256, 0.4)
+     << pool(8, 8, 256, 2, backend_type)
+     << relu_conv(4, 4, 3, 256, 512, padding::same, true, 1, 1, backend_type)
+     << batch_norm(4 * 4, 512, 1e-3) << dropout(4 * 4 * 512, 0.4)
+     << relu_conv(4, 4, 3, 512, 512, padding::same, true, 1, 1, backend_type)
+     << batch_norm(4 * 4, 512, 1e-3) << dropout(4 * 4 * 512, 0.4)
+     << pool(4, 4, 512, 2, backend_type)
+     << relu_conv(4, 4, 3, 512, 512, padding::same, true, 1, 1, backend_type)
+     << batch_norm(4 * 4, 512, 1e-3) << dropout(4 * 4 * 512, 0.4)
+     << relu_conv(4, 4, 3, 512, 512, padding::same, true, 1, 1, backend_type)
+     << batch_norm(4 * 4, 512, 1e-3) << dropout(4 * 4 * 512, 0.4)
+     << relu_conv(4, 4, 3, 512, 512, padding::same, true, 1, 1, backend_type)
+     << batch_norm(4 * 4, 512, 1e-3) << pool(2, 2, 512, 2, backend_type)
+     << dropout(512, 0.5) << relu_fc(512, 512, true, backend_type)
+     << batch_norm(512, 1) << dropout(512, 0.5)
+     << fc(512, 10, true, backend_type);
 }
 
 void train_cifar10(std::string data_dir_path,
@@ -134,8 +156,8 @@ static core::backend_t parse_backend_name(const std::string &name) {
 }
 
 int main(int argc, char **argv) {
-  double learning_rate         = 0.1;
-  int epochs                   = 30;
+  double learning_rate         = 0.01;
+  int epochs                   = 250;
   std::string data_path        = "";
   int minibatch_size           = 10;
   core::backend_t backend_type = core::default_engine();
