@@ -45,11 +45,6 @@ void construct_net(N &nn, core::backend_t backend_type) {
   using relu_fc    = fully_connected_layer<activation::relu>;
   using fc         = fully_connected_layer<activation::identity>;
 
-  const serial_size_t n_fmaps = 32;  ///< number of feature maps for upper layer
-  const serial_size_t n_fmaps2 =
-    64;  ///< number of feature maps for lower layer
-  const serial_size_t n_fc =
-    64;  ///< number of hidden units in fully-connected layer
   // TODO(Randl): ReLU after BatchNorm
   nn << relu_conv(32, 32, 3, 3, 64, padding::same, true, 1, 1, backend_type)
      << batch_norm(32 * 32, 64, 1e-3) << dropout(32 * 32 * 64, 0.3)
@@ -69,12 +64,12 @@ void construct_net(N &nn, core::backend_t backend_type) {
      << relu_conv(4, 4, 3, 512, 512, padding::same, true, 1, 1, backend_type)
      << batch_norm(4 * 4, 512, 1e-3) << dropout(4 * 4 * 512, 0.4)
      << pool(4, 4, 512, 2, backend_type)
-     << relu_conv(4, 4, 3, 512, 512, padding::same, true, 1, 1, backend_type)
-     << batch_norm(4 * 4, 512, 1e-3) << dropout(4 * 4 * 512, 0.4)
-     << relu_conv(4, 4, 3, 512, 512, padding::same, true, 1, 1, backend_type)
-     << batch_norm(4 * 4, 512, 1e-3) << dropout(4 * 4 * 512, 0.4)
-     << relu_conv(4, 4, 3, 512, 512, padding::same, true, 1, 1, backend_type)
-     << batch_norm(4 * 4, 512, 1e-3) << pool(2, 2, 512, 2, backend_type)
+     << relu_conv(2, 2, 3, 512, 512, padding::same, true, 1, 1, backend_type)
+     << batch_norm(2 * 2, 512, 1e-3) << dropout(2 * 2 * 512, 0.4)
+     << relu_conv(2, 2, 3, 512, 512, padding::same, true, 1, 1, backend_type)
+     << batch_norm(2 * 2, 512, 1e-3) << dropout(2 * 2 * 512, 0.4)
+     << relu_conv(2, 2, 3, 512, 512, padding::same, true, 1, 1, backend_type)
+     << batch_norm(2 * 2, 512, 1e-3) << pool(2, 2, 512, 2, backend_type)
      << dropout(512, 0.5) << relu_fc(512, 512, true, backend_type)
      << batch_norm(512, 1) << dropout(512, 0.5)
      << fc(512, 10, true, backend_type);
@@ -159,7 +154,7 @@ int main(int argc, char **argv) {
   double learning_rate         = 0.01;
   int epochs                   = 250;
   std::string data_path        = "";
-  int minibatch_size           = 10;
+  int minibatch_size           = 64;
   core::backend_t backend_type = core::default_engine();
   for (int count = 1; count + 1 < argc; count += 2) {
     std::string argname(argv[count]);
