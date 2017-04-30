@@ -31,14 +31,14 @@
  *****************************************************************************/
 #pragma once
 
-#include "tiny_cnn/layers/layer.h"
-#include "tiny_cnn/util/product.h"
-#include "tiny_cnn/activations/activation_function.h"
+#include "tiny_dnn/layers/layer.h"
+#include "tiny_dnn/util/product.h"
+#include "tiny_dnn/activations/activation_function.h"
 #include <vector>
 #include <string>
 #include <iostream>
 
-namespace tiny_cnn {
+namespace tiny_dnn {
 
 class bnn_conv_layer : public layer<activation::identity> {
 public:

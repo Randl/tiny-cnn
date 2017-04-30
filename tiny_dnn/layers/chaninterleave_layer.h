@@ -30,13 +30,13 @@
  *
  *****************************************************************************/
 #pragma once
-#include "tiny_cnn/util/util.h"
+#include "tiny_dnn/util/util.h"
 
 // each channel's feature maps are either contiguous or interleaved,
 // and this layer switches between those two modes. does not touch
 // row major / column major order of the pixels.
 
-namespace tiny_cnn {
+namespace tiny_dnn {
 
 
 template<typename Activation>
@@ -105,4 +105,4 @@ protected:
     bool deinterleave_;
 };
 
-} // namespace tiny_cnn
+} // namespace tiny_dnn

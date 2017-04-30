@@ -30,9 +30,9 @@
  *
  *****************************************************************************/
 #pragma once
-#include "tiny_cnn/layers/layer.h"
-#include "tiny_cnn/util/product.h"
-#include "tiny_cnn/activations/activation_function.h"
+#include "tiny_dnn/layers/layer.h"
+#include "tiny_dnn/util/product.h"
+#include "tiny_dnn/activations/activation_function.h"
 #include <vector>
 
 // function type for offload handling. args are (input, thresholds, weights, output)
@@ -43,7 +43,7 @@ typedef void (*BinMatVecMult)(std::vector<bool>&, std::vector<unsigned int>&, st
 // use the set_threshold_from_batchnorm function for each neuron to absorb the
 // batchnorm parameters into thresholds
 
-namespace tiny_cnn {
+namespace tiny_dnn {
 
 template<typename Activation>
 class binarynet_layer : public layer<Activation> {
@@ -205,4 +205,4 @@ protected:
 
 };
 
-} // namespace tiny_cnn
+} // namespace tiny_dnn

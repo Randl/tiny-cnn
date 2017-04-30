@@ -33,15 +33,15 @@
 
 // offloaded_layer -- simply calls a hook function every time its forward pass is called
 
-#include "tiny_cnn/activations/activation_function.h"
-#include "tiny_cnn/layers/layer.h"
-#include "tiny_cnn/util/product.h"
-#include "tiny_cnn/util/util.h"
+#include "tiny_dnn/activations/activation_function.h"
+#include "tiny_dnn/layers/layer.h"
+#include "tiny_dnn/util/product.h"
+#include "tiny_dnn/util/util.h"
 #include <vector>
 
 
 
-namespace tiny_cnn {
+namespace tiny_dnn {
 
 typedef struct {
     cnn_size_t in_width;            // input feature map width
@@ -131,5 +131,5 @@ protected:
 #endif
 };
 
-} // namespace tiny_cnn
+} // namespace tiny_dnn
 

@@ -30,13 +30,13 @@
  *
  *****************************************************************************/
 #pragma once
-#include "tiny_cnn/layers/layer.h"
-#include "tiny_cnn/util/product.h"
+#include "tiny_dnn/layers/layer.h"
+#include "tiny_dnn/util/product.h"
 #include <vector>
 #include <string>
 #include <iostream>
 
-namespace tiny_cnn {
+namespace tiny_dnn {
 
 template<typename Activation>
 class bnn_fc_layer : public layer<Activation> {
@@ -140,4 +140,4 @@ protected:
 
 };
 
-} // namespace tiny_cnn
+} // namespace tiny_dnn
