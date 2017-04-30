@@ -214,7 +214,7 @@ std::string to_string(T value) {
   return os.str();
 }
 
-void CNN_LOG_VECTOR(const vec_t& vec, const std::string& name);
+void CNN_LOG_VECTOR(const vec_t &vec, const std::string &name);
 
 template <typename T, typename Pred, typename Sum>
 serial_size_t sumif(const std::vector<T> &vec, Pred p, Sum s) {

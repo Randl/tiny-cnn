@@ -13,17 +13,17 @@
 
 #include "tiny_dnn/core/framework/tensor.h"
 
-#include "tiny_dnn/core/framework/device.h"
-#include "tiny_dnn/core/framework/program_manager.h"
 #include "layers/batchnorm_layer.h"
-#include "layers/bnn_fc_layer.h"
 #include "layers/binarynet_layer.h"
 #include "layers/bnn_conv_layer.h"
-#include "layers/offloaded_layer.h"
-#include "layers/bnn_threshold_layer.h"
+#include "layers/bnn_fc_layer.h"
 #include "layers/bnn_output_layer.h"
+#include "layers/bnn_threshold_layer.h"
 #include "layers/chaninterleave_layer.h"
 #include "layers/monitor_layer.h"
+#include "layers/offloaded_layer.h"
+#include "tiny_dnn/core/framework/device.h"
+#include "tiny_dnn/core/framework/program_manager.h"
 
 #include "tiny_dnn/layers/arithmetic_layer.h"
 #include "tiny_dnn/layers/average_pooling_layer.h"
@@ -134,7 +134,7 @@ using leaky_relu = tiny_dnn::leaky_relu_layer;
 
 using elu = tiny_dnn::elu_layer;
 
-using tanh_p1m2 = tiny_dnn::tanh_p1m2_layer;
+using tanh_p1m2 = tiny_dnn::tanh_p1m2_layer;out_size_
 
 }  // namespace activation
 

@@ -8,10 +8,10 @@
 #pragma once
 
 #include <algorithm>
-#include <string>
-#include <vector>
 #include <deque>
 #include <fstream>
+#include <string>
+#include <vector>
 
 #include "tiny_dnn/core/kernels/conv2d_grad_op.h"
 #include "tiny_dnn/core/kernels/conv2d_op.h"
