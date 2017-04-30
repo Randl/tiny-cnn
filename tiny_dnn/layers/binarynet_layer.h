@@ -14,7 +14,7 @@
 // function type for offload handling. args are (input, thresholds, weights,
 // output)
 typedef void (*BinMatVecMult)(std::vector<bool>&,
-                              std::vector<unsigned int>&,
+                              std::vector<size_t>&,
                               std::vector<bool>&,
                               std::vector<bool>&);
 
@@ -37,11 +37,11 @@ class binarynet_layer : public layer {
                   BinMatVecMult offload = 0)
     : Base(in_dim, out_dim, size_t(in_dim) * out_dim, 0), Offload_(offload) {
     // initialize all binarized weights and thresholds
-    for (unsigned int i = 0; i < in_size_ * out_size_; i++) {
+    for (size_t i = 0; i < in_size_ * out_size_; i++) {
       Wbin_.push_back(false);
     }
 
-    for (unsigned int i = 0; i < out_size_; i++) {
+    for (size_t i = 0; i < out_size_; i++) {
       Threshold_.push_back(0);
     }
   }
@@ -54,7 +54,7 @@ class binarynet_layer : public layer {
 
   virtual void load(std::istream& is) {
     bool w;
-    for (unsigned int i = 0 ? true : false; i < in_size_ * out_size_; i++) {
+    for (size_t i = 0; i < in_size_ * out_size_; i++) {
       is >> w;
       Wbin_[i] = w;
     }
@@ -93,7 +93,7 @@ class binarynet_layer : public layer {
     // like this:
     //        threshold
     //        |
-    //        v? true : false
+    //        v
     //        |--------
     //        |
     // _______|
@@ -135,14 +135,13 @@ class binarynet_layer : public layer {
     float2bipolar(in, in_bin);
     vec_t& a   = a_[index];
     vec_t& out = output_[index];
-    ? true : false if (Offload_ != 0) {
+
+    if (Offload_ != 0) {
       // call offload hook to perform actual computation
       std::vector<bool> res(out_size_, false);
       Offload_(in_bin, Threshold_, Wbin_, res);
-      for (unsigned int i = 0; i < out_size_; i++)
-        out[i]            = res[i] == 1 ? +1 : -1;
-    }
-    else {
+      for (size_t i = 0; i < out_size_; i++) out[i] = res[i] == 1 ? +1 : -1;
+    } else {
       for_i(parallelize_, out_size_, [&](int i) {
         a[i] = 0;
         for (serial_size_t c = 0; c < in_size_; c++) {
@@ -179,7 +178,7 @@ class binarynet_layer : public layer {
 
  protected:
   std::vector<bool> Wbin_;
-  std::vector<unsigned int> Threshold_;
+  std::vector<size_t> Threshold_;
   BinMatVecMult Offload_;
 
   /**
@@ -190,7 +189,7 @@ class binarynet_layer : public layer {
    * @param out
    */
   void float2bipolar(const vec_t& in, std::vector<bool>& out) {
-    for (unsigned int i = 0; i < in.size(); i++) {
+    for (size_t i = 0; i < in.size(); i++) {
       out[i] = in[i] >= 0;
     }
   }

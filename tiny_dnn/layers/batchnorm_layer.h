@@ -29,8 +29,13 @@ class batchnorm_layer : public layer {
  public:
   typedef layer Base;
 
-  // channels: number of channels. each channel has a batchnorm parameter set.
-  // dim: number of pixels/elements in each channel.
+  /**
+   *
+   * @param channels number of channels. each channel has a batchnorm
+   * parameter set.
+   * @param dim number of pixels/elements in each channel.
+   * @param paramFile
+   */
   batchnorm_layer(serial_size_t channels,
                   serial_size_t dim     = 1,
                   std::string paramFile = "")
@@ -47,7 +52,7 @@ class batchnorm_layer : public layer {
     // parameter
 
     std::ifstream wf(fileName, std::ios::binary | std::ios::in);
-    for (unsigned int line = 0; line < Base::W_.size(); line++) {
+    for (size_t line = 0; line < Base::W_.size(); line++) {
       float e = 0;
       wf.read((char*)&e, sizeof(float));
       W_[line] = e;
@@ -67,9 +72,9 @@ class batchnorm_layer : public layer {
     vec_t& out = output_[index];
 
     for_i(parallelize_, channels_, [&](int ch) {
-      for (unsigned int j = 0; j < dim_; j++) {
-        unsigned int pos = ch * dim_ + j;
-        a[pos] = gamma(ch) * (in[pos] - mean(ch)) * invstd(ch) + beta(ch);
+      for (size_t j = 0; j < dim_; j++) {
+        size_t pos = ch * dim_ + j;
+        a[pos]     = gamma(ch) * (in[pos] - mean(ch)) * invstd(ch) + beta(ch);
       }
     });
 
@@ -92,15 +97,15 @@ class batchnorm_layer : public layer {
   std::string layer_type() const override { return "batchnorm"; }
 
  protected:
-  unsigned int dim_;
-  unsigned int channels_;
-  inline float_t beta(unsigned int ind) { return W_[(channels_ * 0) + ind]; }
+  size_t dim_;
+  size_t channels_;
+  inline float_t beta(size_t ind) { return W_[(channels_ * 0) + ind]; }
 
-  inline float_t gamma(unsigned int ind) { return W_[(channels_ * 1) + ind]; }
+  inline float_t gamma(size_t ind) { return W_[(channels_ * 1) + ind]; }
 
-  inline float_t mean(unsigned int ind) { return W_[(channels_ * 2) + ind]; }
+  inline float_t mean(size_t ind) { return W_[(channels_ * 2) + ind]; }
 
-  inline float_t invstd(unsigned int ind) { return W_[(channels_ * 3) + ind]; }
+  inline float_t invstd(size_t ind) { return W_[(channels_ * 3) + ind]; }
 };
 
 }  // namespace tiny_dnn

@@ -45,7 +45,7 @@ class bnn_threshold_layer : public layer<activation::identity> {
     // load thresholds
     std::ifstream tf(fileName, std::ios::binary | std::ios::in);
     if (!tf.is_open()) throw "Could not open file";
-    for (unsigned int line = 0; line < channels_; line++) {
+    for (size_t line = 0; line < channels_; line++) {
       unsigned long long e = 0;
       tf.read((char*)&e, sizeof(unsigned long long));
       thresholds_[line] = e;
@@ -54,8 +54,7 @@ class bnn_threshold_layer : public layer<activation::identity> {
   }
 
   std::vector<int>& thresholds() { return thresholds_; }
-
-  std::vector<bool>& invertOutput() { return invertOutput_; }
+  <Activation> std::vector<bool>& invertOutput() { return invertOutput_; }
 
   size_t connection_size() const override { return in_size_; }
 
@@ -66,10 +65,10 @@ class bnn_threshold_layer : public layer<activation::identity> {
   const vec_t& forward_propagation(const vec_t& in, size_t index) override {
     vec_t& out = output_[index];
 
-    for (unsigned int ch = 0; ch < channels_; ch++) {
-      for (unsigned int j = 0; j < dim_; j++) {
-        unsigned int pos = ch * dim_ + j;
-        out[pos]         = (in[pos] > thresholds_[ch] ? +1 : -1);
+    for (size_t ch = 0; ch < channels_; ch++) {
+      for (size_t j = 0; j < dim_; j++) {
+        size_t pos = ch * dim_ + j;
+        out[pos]   = (in[pos] > thresholds_[ch] ? +1 : -1);
 
         if (invertOutput_[ch]) out[pos] = -out[pos];
       }
@@ -92,8 +91,8 @@ class bnn_threshold_layer : public layer<activation::identity> {
   std::string layer_type() const override { return "bnn_threshold_layer"; }
 
  protected:
-  unsigned int dim_;
-  unsigned int channels_;
+  size_t dim_;
+  size_t channels_;
 
   std::vector<int> thresholds_;
   std::vector<bool> invertOutput_;

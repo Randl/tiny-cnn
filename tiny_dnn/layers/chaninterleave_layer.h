@@ -41,8 +41,8 @@ class chaninterleave_layer : public layer<Activation> {
     vec_t& a   = a_[index];
     vec_t& out = output_[index];
 
-    for (unsigned int c = 0; c < channels_; c++) {
-      for (unsigned int pix = 0; pix < pixelsPerChan_; pix++) {
+    for (size_t c = 0; c < channels_; c++) {
+      for (size_t pix = 0; pix < pixelsPerChan_; pix++) {
         if (deinterleave_) {
           out[c * pixelsPerChan_ + pix] = in[pix * channels_ + c];
         } else {

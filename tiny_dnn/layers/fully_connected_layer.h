@@ -50,13 +50,13 @@ class fully_connected_layer : public layer {
 
     std::ifstream wf(fileName, std::ios::binary | std::ios::in);
     if (!wf.is_open()) throw "Could not open file";
-    for (unsigned int line = 0; line < Base::W_.size(); line++) {
+    for (size_t line = 0; line < Base::W_.size(); line++) {
       float e = 0;
       wf.read((char *)&e, sizeof(float));
       W_[line] = e;
     }
     if (has_bias_) {
-      for (unsigned int line = 0; line < Base::b_.size(); line++) {
+      for (size_t line = 0; line < Base::b_.size(); line++) {
         float e = 0;
         wf.read((char *)&e, sizeof(float));
         b_[line] = e;

@@ -29,7 +29,7 @@ typedef struct {
 // function type for offload handling. args are (input, output, offloadID, conv
 // params if any or 0, target set of weigths)
 typedef void (*OffloadHandler)(
-  const vec_t&, vec_t&, unsigned int, OffloadConvParams*, unsigned int);
+  const vec_t&, vec_t&, size_t, OffloadConvParams*, size_t);
 
 class offloaded_layer : public layer<activation::identity> {
  public:
@@ -38,9 +38,9 @@ class offloaded_layer : public layer<activation::identity> {
   offloaded_layer(serial_size_t in_dim,
                   serial_size_t out_dim,
                   OffloadHandler handler,
-                  unsigned int offloadID,
+                  size_t offloadID,
                   OffloadConvParams* convParams = 0,
-                  unsigned int targetSet        = 0)
+                  size_t targetSet              = 0)
     : Base(in_dim, out_dim, 0, 0),
       offloadHandler_(handler),
       offloadID_(offloadID),
@@ -51,7 +51,7 @@ class offloaded_layer : public layer<activation::identity> {
 // params if any or 0)
 typedef void (*OffloadHandler)(const vec_t&,
                                vec_t&,
-                               unsigned int,
+                               size_t,
                                OffloadConvParams*);
 
 class offloaded_layer : public layer<activation::identity> {
@@ -61,7 +61,7 @@ class offloaded_layer : public layer<activation::identity> {
   offloaded_layer(serial_size_t in_dim,
                   serial_size_t out_dim,
                   OffloadHandler handler,
-                  unsigned int offloadID,
+                  size_t offloadID,
                   OffloadConvParams* convParams = 0)
     : Base(in_dim, out_dim, 0, 0),
       offloadHandler_(handler),
@@ -109,9 +109,9 @@ class offloaded_layer : public layer<activation::identity> {
  protected:
   OffloadHandler offloadHandler_;
   OffloadConvParams* offloadConvParams_;
-  unsigned int offloadID_;
+  size_t offloadID_;
 #ifdef SOLITAIRE
-  unsigned int targetSet_;
+  size_t targetSet_;
 #endif
 };
 

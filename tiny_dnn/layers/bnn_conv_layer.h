@@ -15,9 +15,9 @@
 
 namespace tiny_dnn {
 
-class bnn_conv_layer : public layer<activation::identity> {
+class bnn_conv_layer : public layer {
  public:
-  typedef layer<activation::identity> Base;
+  typedef layer Base;
 
   // assumptions: padding::valid, wstride=hstride=1, no bias
   bnn_conv_layer(serial_size_t in_width,
@@ -25,7 +25,7 @@ class bnn_conv_layer : public layer<activation::identity> {
                  serial_size_t window_size,
                  serial_size_t in_channels,
                  serial_size_t out_channels,
-                 bool usePopcount            = false,
+                 bool use_popcount           = false,
                  std::string binaryParamFile = "")
     : Base(in_width * in_height * in_channels,
            (in_width - window_size + 1) * (in_height - window_size + 1) *
@@ -38,7 +38,7 @@ class bnn_conv_layer : public layer<activation::identity> {
       in_channels_(in_channels),
       out_channels_(out_channels),
       Wbin_(out_channels * in_channels * window_size * window_size, false),
-      usePopcount_(usePopcount) {
+      use_popcount_(use_popcount) {
     // TODO re-enable parallelization -- need to support worker index in forward
     // prop
     Base::set_parallelize(false);
@@ -54,10 +54,10 @@ class bnn_conv_layer : public layer<activation::identity> {
     // load weights
     std::ifstream wf(fileName, std::ios::binary | std::ios::in);
     if (!wf.is_open()) throw "Could not open file";
-    for (unsigned int line = 0; line < Wbin_.size(); line++) {
+    for (size_t line = 0; line < Wbin_.size(); line++) {
       unsigned long long e = 0;
-      wf.read((char*)&e, sizeof(unsigned long long));
-      Wbin_[line] = e == 1 ? true : false;
+      wf.read((char*)&e, sizeof(unsigned long long));  // TODO
+      Wbin_[line] = e == 1;
     }
     wf.close();
   }
@@ -100,21 +100,21 @@ class bnn_conv_layer : public layer<activation::identity> {
     // TODO support padding modes
     // TODO support worker index for parallelization
     for (serial_size_t oc = 0; oc < out_channels_; oc++) {
-      unsigned int output_base = oc * out_height_ * out_width_;
+      size_t output_base = oc * out_height_ * out_width_;
       for (serial_size_t oy = 0; oy < out_height_; oy++) {
         for (serial_size_t ox = 0; ox < out_width_; ox++) {
           int acc = 0;
           for (serial_size_t ic = 0; ic < in_channels_; ic++) {
-            unsigned int weight_base =
+            size_t weight_base =
               oc * (window_size_ * window_size_ * in_channels_) +
               (window_size_ * window_size_ * ic);
-            unsigned int input_base =
+            size_t input_base =
               ic * (in_width_ * in_height_) + oy * in_width_ + ox;
             for (serial_size_t ky = 0; ky < window_size_; ky++) {
               for (serial_size_t kx = 0; kx < window_size_; kx++) {
-                unsigned int weight_ind = weight_base + ky * window_size_ + kx;
-                unsigned int input_ind  = input_base + ky * in_width_ + kx;
-                if (usePopcount_) {
+                size_t weight_ind = weight_base + ky * window_size_ + kx;
+                size_t input_ind  = input_base + ky * in_width_ + kx;
+                if (use_popcount_) {
                   // accumulate popcount (+1 bits) only
                   acc += Wbin_[weight_ind] == in_bin[input_ind] ? +1 : 0;
                 } else {
@@ -124,8 +124,8 @@ class bnn_conv_layer : public layer<activation::identity> {
               }
             }
           }
-          unsigned int output_ind = output_base + oy * out_width_ + ox;
-          out[output_ind]         = acc;
+          size_t output_ind = output_base + oy * out_width_ + ox;
+          out[output_ind]   = acc;
         }
       }
     }
@@ -141,7 +141,7 @@ class bnn_conv_layer : public layer<activation::identity> {
   }
 
  protected:
-  bool usePopcount_;
+  bool use_popcount_;
   std::vector<bool> Wbin_;
   serial_size_t in_width_;
   serial_size_t in_height_;
@@ -151,13 +151,14 @@ class bnn_conv_layer : public layer<activation::identity> {
   serial_size_t out_width_;
   serial_size_t out_height_;
 
-  // utility function to convert a vector of floats into a vector of bools,
-  // where the
-  // output boolean represents the sign of the input value (false: negative,
-  // true: positive)
+  /**
+   * utility function to convert a vector of floats into a vector of bools
+   * @param in a vector of floats
+   * @param out a vector of bools where the output boolean represents the sign
+   * of the input value (false: negative, true: positive)
+   */
   void float2bipolar(const vec_t& in, std::vector<bool>& out) {
-    for (unsigned int i = 0; i < in.size(); i++)
-      out[i]            = in[i] >= 0 ? true : false;
+    for (size_t i = 0; i < in.size(); i++) out[i] = in[i] >= 0;
   }
 };
 }

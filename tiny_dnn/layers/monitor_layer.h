@@ -44,7 +44,7 @@ class monitor_layer : public layer<activation::identity> {
 
     std::cout << monitorName_ << std::endl;
 
-    for (unsigned int i = 0; i < in.size(); i++) {
+    for (size_t i = 0; i < in.size(); i++) {
       out[i] = in[i];
       std::cout << i << " " << in[i] << std::endl;
     }

@@ -14,19 +14,18 @@
 
 namespace tiny_dnn {
 
-template <typename Activation>
-class bnn_fc_layer : public layer<Activation> {
+class bnn_fc_layer : public layer {
  public:
-  typedef layer<Activation> Base;
+  typedef layer Base;
 
   bnn_fc_layer(serial_size_t in_dim,
                serial_size_t out_dim,
-               bool usePopcount            = false,
+               bool use_popcount           = false,
                bool rowMajorWeights        = false,
                std::string binaryParamFile = "")
     : Base(in_dim, out_dim, size_t(in_dim) * out_dim, 0),
       Wbin_(in_dim * out_dim, false),
-      usePopcount_(usePopcount),
+      use_popcount_(use_popcount),
       rowMajorWeights_(rowMajorWeights) {
     if (binaryParamFile != "") loadFromBinaryFile(binaryParamFile);
   }
@@ -37,7 +36,7 @@ class bnn_fc_layer : public layer<Activation> {
     // load weights
     std::ifstream wf(fileName, std::ios::binary | std::ios::in);
     if (!wf.is_open()) throw "Could not open file";
-    for (unsigned int line = 0; line < Wbin_.size(); line++) {
+    for (size_t line = 0; line < Wbin_.size(); line++) {
       unsigned long long e = 0;
       wf.read((char*)&e, sizeof(unsigned long long));
       Wbin_[line] = e == 1;
@@ -72,9 +71,9 @@ class bnn_fc_layer : public layer<Activation> {
         // i.e. if two values have the same sign (pos-pos or neg-neg)
         // the mul. result will be positive, otherwise negative
         // when using the popcount mode, consider positive results only
-        const unsigned int wInd =
+        const size_t wInd =
           rowMajorWeights_ ? i * in_size_ + c : c * out_size_ + i;
-        if (usePopcount_)
+        if (use_popcount_)
           a[i] += (Wbin_[wInd] == in_bin[c]) ? +1 : 0;
         else
           a[i] += (Wbin_[wInd] == in_bin[c]) ? +1 : -1;
@@ -102,17 +101,16 @@ class bnn_fc_layer : public layer<Activation> {
 
  protected:
   std::vector<bool> Wbin_;
-  bool usePopcount_, rowMajorWeights_;
+  bool use_popcount_, rowMajorWeights_;
 
   /**
-   * utility function to convert a vector of floats into a vector of bools,
-   * where the output boolean represents the sign of the input value (false:
-   * negative, true: positive)
-   * @param in
-   * @param out
+   * utility function to convert a vector of floats into a vector of bools
+   * @param in a vector of floats
+   * @param out a vector of bools where the output boolean represents the sign
+   * of the input value (false: negative, true: positive)
    */
   void float2bipolar(const vec_t& in, std::vector<bool>& out) {
-    for (unsigned int i = 0; i < in.size(); i++) {
+    for (size_t i = 0; i < in.size(); i++) {
       out[i] = in[i] >= 0;
     }
   }
