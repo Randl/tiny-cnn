@@ -28,12 +28,12 @@
 /**
  * define to enable OMP parallelization
  */
-#define CNN_USE_OMP
+// #define CNN_USE_OMP
 
 /**
  * define to enable Grand Central Dispatch parallelization
  */
-//#define CNN_USE_GCD
+// #define CNN_USE_GCD
 
 /**
  * define to use exceptions
@@ -58,7 +58,7 @@
  * Enable Image API support.
  * Currently we use stb by default.
  **/
-//#define DNN_USE_IMAGE_API
+// #define DNN_USE_IMAGE_API
 
 /**
  * Enable Gemmlowp support.
