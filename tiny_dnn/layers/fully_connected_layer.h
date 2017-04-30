@@ -44,7 +44,8 @@ class fully_connected_layer : public layer {
     init_backend(std::move(other.engine()));
   }
 
-  void loadFromBinaryFile(std::string fileName) {
+  /*
+   void loadFromBinaryFile(std::string fileName) {
     // TODO this assumes the binary file always uses a float for each parameter
 
     std::ifstream wf(fileName, std::ios::binary | std::ios::in);
@@ -63,7 +64,7 @@ class fully_connected_layer : public layer {
     }
     wf.close();
   }
-
+  */
   serial_size_t fan_in_size() const override { return params_.in_size_; }
 
   serial_size_t fan_out_size() const override { return params_.out_size_; }

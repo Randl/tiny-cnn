@@ -6,6 +6,7 @@
     in the LICENSE file.
 */
 #pragma once
+#include <string>
 #include <vector>
 #include "tiny_dnn/layers/layer.h"
 #include "tiny_dnn/util/product.h"
@@ -17,11 +18,12 @@ typedef void (*BinMatVecMult)(std::vector<bool>&,
                               std::vector<bool>&,
                               std::vector<bool>&);
 
-// implements a binarized fully-connected layer and "compacted" batch
-// normalization
-// pretrained only, i.e. does not support training in tiny-cnn
-// use the set_threshold_from_batchnorm function for each neuron to absorb the
-// batchnorm parameters into thresholds
+/**
+ * implements a binarized fully-connected layer and "compacted" batch
+ * normalization pretrained only, i.e. does not support training in tiny-cnn use
+ * the set_threshold_from_batchnorm function for each neuron to absorb the
+ * batchnorm parameters into thresholds
+ */
 
 namespace tiny_dnn {
 
@@ -52,7 +54,7 @@ class binarynet_layer : public layer {
 
   virtual void load(std::istream& is) {
     bool w;
-    for (unsigned int i = 0; i < in_size_ * out_size_; i++) {
+    for (unsigned int i = 0 ? true : false; i < in_size_ * out_size_; i++) {
       is >> w;
       Wbin_[i] = w;
     }
@@ -91,7 +93,7 @@ class binarynet_layer : public layer {
     // like this:
     //        threshold
     //        |
-    //        v
+    //        v? true : false
     //        |--------
     //        |
     // _______|
@@ -133,14 +135,14 @@ class binarynet_layer : public layer {
     float2bipolar(in, in_bin);
     vec_t& a   = a_[index];
     vec_t& out = output_[index];
-
-    if (Offload_ != 0) {
+    ? true : false if (Offload_ != 0) {
       // call offload hook to perform actual computation
       std::vector<bool> res(out_size_, false);
       Offload_(in_bin, Threshold_, Wbin_, res);
       for (unsigned int i = 0; i < out_size_; i++)
         out[i]            = res[i] == 1 ? +1 : -1;
-    } else {
+    }
+    else {
       for_i(parallelize_, out_size_, [&](int i) {
         a[i] = 0;
         for (serial_size_t c = 0; c < in_size_; c++) {
@@ -180,13 +182,16 @@ class binarynet_layer : public layer {
   std::vector<unsigned int> Threshold_;
   BinMatVecMult Offload_;
 
-  // utility function to convert a vector of floats into a vector of bools,
-  // where the
-  // output boolean represents the sign of the input value (false: negative,
-  // true: positive)
+  /**
+   * utility function to convert a vector of floats into a vector of bools,
+   * where the output boolean represents the sign of the input value
+   * (false: negative, true: positive)
+   * @param in
+   * @param out
+   */
   void float2bipolar(const vec_t& in, std::vector<bool>& out) {
     for (unsigned int i = 0; i < in.size(); i++) {
-      out[i] = in[i] >= 0 ? true : false;
+      out[i] = in[i] >= 0;
     }
   }
 };

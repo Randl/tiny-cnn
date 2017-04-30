@@ -11,24 +11,21 @@
 #include "tiny_dnn/network.h"
 #include "tiny_dnn/nodes.h"
 
-#include "tiny_dnn/core/framework/tensor.h"
-
-#include "layers/batchnorm_layer.h"
-#include "layers/binarynet_layer.h"
-#include "layers/bnn_conv_layer.h"
-#include "layers/bnn_fc_layer.h"
-#include "layers/bnn_output_layer.h"
-#include "layers/bnn_threshold_layer.h"
-#include "layers/chaninterleave_layer.h"
-#include "layers/monitor_layer.h"
-#include "layers/offloaded_layer.h"
 #include "tiny_dnn/core/framework/device.h"
 #include "tiny_dnn/core/framework/program_manager.h"
+#include "tiny_dnn/core/framework/tensor.h"
 
 #include "tiny_dnn/layers/arithmetic_layer.h"
 #include "tiny_dnn/layers/average_pooling_layer.h"
 #include "tiny_dnn/layers/average_unpooling_layer.h"
 #include "tiny_dnn/layers/batch_normalization_layer.h"
+#include "tiny_dnn/layers/batchnorm_layer.h"
+#include "tiny_dnn/layers/binarynet_layer.h"
+#include "tiny_dnn/layers/bnn_conv_layer.h"
+#include "tiny_dnn/layers/bnn_fc_layer.h"
+#include "tiny_dnn/layers/bnn_output_layer.h"
+#include "tiny_dnn/layers/bnn_threshold_layer.h"
+#include "tiny_dnn/layers/chaninterleave_layer.h"
 #include "tiny_dnn/layers/concat_layer.h"
 #include "tiny_dnn/layers/convolutional_layer.h"
 #include "tiny_dnn/layers/deconvolutional_layer.h"
@@ -39,10 +36,16 @@
 #include "tiny_dnn/layers/lrn_layer.h"
 #include "tiny_dnn/layers/max_pooling_layer.h"
 #include "tiny_dnn/layers/max_unpooling_layer.h"
+#include "tiny_dnn/layers/monitor_layer.h"
+#include "tiny_dnn/layers/offloaded_layer.h"
 #include "tiny_dnn/layers/power_layer.h"
 #include "tiny_dnn/layers/quantized_convolutional_layer.h"
 #include "tiny_dnn/layers/quantized_deconvolutional_layer.h"
 #include "tiny_dnn/layers/slice_layer.h"
+
+#ifdef CNN_USE_GEMMLOWP
+#include "tiny_dnn/layers/quantized_fully_connected_layer.h"
+#endif  // CNN_USE_GEMMLOWP
 
 #include "tiny_dnn/activations/elu_layer.h"
 #include "tiny_dnn/activations/leaky_relu_layer.h"
@@ -51,10 +54,6 @@
 #include "tiny_dnn/activations/softmax_layer.h"
 #include "tiny_dnn/activations/tanh_layer.h"
 #include "tiny_dnn/activations/tanh_p1m2_layer.h"
-
-#ifdef CNN_USE_GEMMLOWP
-#include "tiny_dnn/layers/quantized_fully_connected_layer.h"
-#endif  // CNN_USE_GEMMLOWP
 
 #include "tiny_dnn/lossfunctions/loss_function.h"
 #include "tiny_dnn/optimizers/optimizer.h"
@@ -134,7 +133,7 @@ using leaky_relu = tiny_dnn::leaky_relu_layer;
 
 using elu = tiny_dnn::elu_layer;
 
-using tanh_p1m2 = tiny_dnn::tanh_p1m2_layer;out_size_
+using tanh_p1m2 = tiny_dnn::tanh_p1m2_layer;
 
 }  // namespace activation
 

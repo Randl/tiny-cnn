@@ -40,7 +40,7 @@ class bnn_fc_layer : public layer<Activation> {
     for (unsigned int line = 0; line < Wbin_.size(); line++) {
       unsigned long long e = 0;
       wf.read((char*)&e, sizeof(unsigned long long));
-      Wbin_[line] = e == 1 ? true : false;
+      Wbin_[line] = e == 1;
     }
     wf.close();
   }
@@ -104,13 +104,17 @@ class bnn_fc_layer : public layer<Activation> {
   std::vector<bool> Wbin_;
   bool usePopcount_, rowMajorWeights_;
 
-  // utility function to convert a vector of floats into a vector of bools,
-  // where the
-  // output boolean represents the sign of the input value (false: negative,
-  // true: positive)
+  /**
+   * utility function to convert a vector of floats into a vector of bools,
+   * where the output boolean represents the sign of the input value (false:
+   * negative, true: positive)
+   * @param in
+   * @param out
+   */
   void float2bipolar(const vec_t& in, std::vector<bool>& out) {
-    for (unsigned int i = 0; i < in.size(); i++)
-      out[i]            = in[i] >= 0 ? true : false;
+    for (unsigned int i = 0; i < in.size(); i++) {
+      out[i] = in[i] >= 0;
+    }
   }
 };
 
