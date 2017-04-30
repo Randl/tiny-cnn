@@ -69,7 +69,7 @@ boost::timer t;
 // create callbacks
 auto on_enumerate_epoch = [&](){
     std::cout << t.elapsed() << "s elapsed." << std::endl;
-    tiny_cnn::result res = nn.test(test_images, test_labels);
+    tiny_dnn::result res = nn.test(test_images, test_labels);
     std::cout << res.num_success << "/" << res.num_total << std::endl;
     disp.restart(train_images.size());
     t.restart();
@@ -93,10 +93,10 @@ ifs >> nn;
 train.cpp
 ```cpp
 #include <iostream>
-#include "tiny_cnn/tiny_cnn.h"
+#include "tiny_dnn/tiny_dnn.h"
 
-using namespace tiny_cnn;
-using namespace tiny_cnn::activation;
+using namespace tiny_dnn;
+using namespace tiny_dnn::activation;
 
 void construct_net(network<mse, adagrad>& nn) {
     // connection table [Y.Lecun, 1998 Table.1]
@@ -156,7 +156,7 @@ void train_lenet(std::string data_dir_path) {
     // create callback
     auto on_enumerate_epoch = [&](){
         std::cout << t.elapsed() << "s elapsed." << std::endl;
-        tiny_cnn::result res = nn.test(test_images, test_labels);
+        tiny_dnn::result res = nn.test(test_images, test_labels);
         std::cout << res.num_success << "/" << res.num_total << std::endl;
 
         disp.restart(train_images.size());
@@ -206,10 +206,10 @@ test.cpp
 #include <opencv2/imgproc.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/highgui.hpp>
-#include "tiny_cnn/tiny_cnn.h"
+#include "tiny_dnn/tiny_dnn.h"
 
-using namespace tiny_cnn;
-using namespace tiny_cnn::activation;
+using namespace tiny_dnn;
+using namespace tiny_dnn::activation;
 using namespace std;
 
 // rescale output to 0-100
@@ -219,7 +219,7 @@ double rescale(double x) {
     return 100.0 * (x - a.scale().first) / (a.scale().second - a.scale().first);
 }
 
-// convert tiny_cnn::image to cv::Mat and resize
+// convert tiny_dnn::image to cv::Mat and resize
 cv::Mat image2mat(image<>& img) {
     cv::Mat ori(img.height(), img.width(), CV_8U, &img.at(0, 0));
     cv::Mat resized;

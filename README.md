@@ -24,7 +24,7 @@ see [Wiki Pages](https://github.com/nyanp/tiny-cnn/wiki) for more info.
     - with TBB threading and SSE/AVX vectorization
     - 98.8% accuracy on MNIST in 13 minutes training (@Core i7-3520M)
 - header only
-    - Just include tiny_cnn.h and write your model in c++. There is nothing to install.
+    - Just include tiny_dnn.h and write your model in c++. There is nothing to install.
 - small dependency & simple implementation
 - [can import caffe's model](https://github.com/nyanp/tiny-cnn/tree/master/examples/caffe_converter)
 
@@ -113,12 +113,12 @@ You can edit include/config.h to customize default behavior.
 construct convolutional neural networks
 
 ```cpp
-#include "tiny_cnn/tiny_cnn.h"
-using namespace tiny_cnn;
-using namespace tiny_cnn::activation;
+#include "tiny_dnn/tiny_dnn.h"
+using namespace tiny_dnn;
+using namespace tiny_dnn::activation;
 
 void construct_cnn() {
-    using namespace tiny_cnn;
+    using namespace tiny_dnn;
 
     // specify loss-function and optimization-algorithm
     network<mse, adagrad> net;
@@ -155,9 +155,9 @@ void construct_cnn() {
 construct multi-layer perceptron(mlp)
 
 ```cpp
-#include "tiny_cnn/tiny_cnn.h"
-using namespace tiny_cnn;
-using namespace tiny_cnn::activation;
+#include "tiny_dnn/tiny_dnn.h"
+using namespace tiny_dnn;
+using namespace tiny_dnn::activation;
 
 void construct_mlp() {
     network<mse, gradient_descent> net;
@@ -173,9 +173,9 @@ void construct_mlp() {
 another way to construct mlp
 
 ```cpp
-#include "tiny_cnn/tiny_cnn.h"
-using namespace tiny_cnn;
-using namespace tiny_cnn::activation;
+#include "tiny_dnn/tiny_dnn.h"
+using namespace tiny_dnn;
+using namespace tiny_dnn::activation;
 
 void construct_mlp() {
     auto mynet = make_mlp<mse, gradient_descent, tan_h>({ 32 * 32, 300, 10 });

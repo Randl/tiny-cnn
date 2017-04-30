@@ -29,9 +29,9 @@
 #include <iostream>
 #include <cstdio>
 #include "picotest/picotest.h"
-#include "tiny_cnn/tiny_cnn.h"
+#include "tiny_dnn/tiny_dnn.h"
 
-namespace tiny_cnn {
+namespace tiny_dnn {
 
 template <typename Container, typename T>
 inline bool is_near_container(const Container& expected, const Container& actual, T abs_error) {
@@ -114,4 +114,4 @@ void serialization_test(T& src, T& dst)
     EXPECT_TRUE(is_near_container(r1, r2, 1E-4));
 }
 
-} // namespace tiny_cnn
+} // namespace tiny_dnn

@@ -27,9 +27,9 @@
 #pragma once
 #include "picotest/picotest.h"
 #include "testhelper.h"
-#include "tiny_cnn/tiny_cnn.h"
+#include "tiny_dnn/tiny_dnn.h"
 
-namespace tiny_cnn {
+namespace tiny_dnn {
 
 TEST(network, in_dim) {
     network<mse, adagrad> net;
@@ -356,7 +356,7 @@ TEST(network, read_write)
     ASSERT_TRUE(n1.has_same_weights(n2, 1e-6));
 
     for (int i = 0; i < 10; i++) {
-        tiny_cnn::float_t eps = std::abs(res1[i]) * 1e-5;
+        tiny_dnn::float_t eps = std::abs(res1[i]) * 1e-5;
         ASSERT_TRUE(std::abs(res1[i] - res2[i]) < eps);
     }
 }

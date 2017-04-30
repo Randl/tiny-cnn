@@ -27,14 +27,14 @@
 #pragma once
 #include "picotest/picotest.h"
 #include "testhelper.h"
-#include "tiny_cnn/tiny_cnn.h"
+#include "tiny_dnn/tiny_dnn.h"
 
-namespace tiny_cnn {
+namespace tiny_dnn {
 
 TEST(max_pool, gradient_check) { // sigmoid - cross-entropy
     typedef cross_entropy loss_func;
     typedef activation::sigmoid activation;
-    typedef network<loss_func, tiny_cnn::gradient_descent_levenberg_marquardt> network;
+    typedef network<loss_func, tiny_dnn::gradient_descent_levenberg_marquardt> network;
 
     network nn;
     nn << fully_connected_layer<activation>(3, 8)

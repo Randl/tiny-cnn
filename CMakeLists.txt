@@ -9,7 +9,7 @@
 # ----------------------------------------------------------------------------
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
-PROJECT(tiny_cnn)
+PROJECT(tiny_dnn)
 set(PROJECT_VERSION "0.0.1")
 string(REGEX MATCHALL "[0-9]" PROJECT_VERSION_PARTS "${PROJECT_VERSION}")
 list(GET PROJECT_VERSION_PARTS 0 PROJECT_VERSION_MAJOR)
@@ -115,21 +115,21 @@ ENDIF()
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR} )
 LINK_LIBRARIES(${REQUIRED_LIBRARIES} )
 
-SET( tiny_cnn_hrds tiny_cnn/activations/activation_function.h  tiny_cnn/io/cifar10_parser.h  tiny_cnn/layers/convolutional_layer.h  tiny_cnn/io/display.h  tiny_cnn/util/image.h  tiny_cnn/layers/layer.h  tiny_cnn/lossfunctions/loss_function.h  tiny_cnn/io/mnist_parser.h  tiny_cnn/optimizers/optimizer.h  tiny_cnn/util/product.h  tiny_cnn/util/util.h
-tiny_cnn/layers/average_pooling_layer.h  tiny_cnn/config.h  tiny_cnn/util/deform.h tiny_cnn/layers/fully_connected_layer.h tiny_cnn/layers/input_layer.h  tiny_cnn/layers/layers.h  tiny_cnn/layers/max_pooling_layer.h  tiny_cnn/network.h  tiny_cnn/layers/partial_connected_layer.h  tiny_cnn/tiny_cnn.h  tiny_cnn/util/weight_init.h)
+SET( tiny_dnn_hrds tiny_dnn/activations/activation_function.h tiny_dnn/io/cifar10_parser.h tiny_dnn/layers/convolutional_layer.h tiny_dnn/io/display.h tiny_dnn/util/image.h tiny_dnn/layers/layer.h tiny_dnn/lossfunctions/loss_function.h tiny_dnn/io/mnist_parser.h tiny_dnn/optimizers/optimizer.h tiny_dnn/util/product.h tiny_dnn/util/util.h
+    tiny_dnn/layers/average_pooling_layer.h tiny_dnn/config.h tiny_dnn/util/deform.h tiny_dnn/layers/fully_connected_layer.h tiny_dnn/layers/input_layer.h tiny_dnn/layers/layers.h tiny_dnn/layers/max_pooling_layer.h tiny_dnn/network.h tiny_dnn/layers/partial_connected_layer.h tiny_dnn/tiny_dnn.h tiny_dnn/util/weight_init.h)
 
-SET(tiny_cnn_test_headers test/test_average_pooling_layer.h test/test_convolutional_layer.h test/test_fully_connected_layer.h test/test_lrn_layer.h test/test_max_pooling_layer.h test/test_dropout_layer.h test/test_network.h test/testhelper.h test/picotest/picotest.h)
+SET(tiny_dnn_test_headers test/test_average_pooling_layer.h test/test_convolutional_layer.h test/test_fully_connected_layer.h test/test_lrn_layer.h test/test_max_pooling_layer.h test/test_dropout_layer.h test/test_network.h test/testhelper.h test/picotest/picotest.h)
 
 IF (BUILD_EXAMPLES)
-    ADD_EXECUTABLE(example_mnist_train examples/mnist/train.cpp ${tiny_cnn_hrds})
-    ADD_EXECUTABLE(example_mnist_test examples/mnist/test.cpp  ${tiny_cnn_hrds})
-    ADD_EXECUTABLE(example_cifar_train examples/cifar10/train.cpp ${tiny_cnn_hrds})
+    ADD_EXECUTABLE(example_mnist_train examples/mnist/train.cpp ${tiny_dnn_hrds})
+    ADD_EXECUTABLE(example_mnist_test examples/mnist/test.cpp  ${tiny_dnn_hrds})
+    ADD_EXECUTABLE(example_cifar_train examples/cifar10/train.cpp ${tiny_dnn_hrds})
     target_link_libraries( example_mnist_test ${OpenCV_LIBS} )
     include_directories(${OpenCV_INCLUDE_DIRS})
 ENDIF()
 
 IF(BUILD_TESTS)
-    ADD_EXECUTABLE(tiny_cnn_test test/test.cpp ${tiny_cnn_hrds} ${tiny_cnn_test_headers})
+    ADD_EXECUTABLE(tiny_dnn_test test/test.cpp ${tiny_dnn_hrds} ${tiny_dnn_test_headers})
 ENDIF()
 
 
