@@ -25,10 +25,10 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 #include <iostream>
-#include "tiny_cnn/tiny_cnn.h"
+#include "tiny_dnn/tiny_dnn.h"
 
-using namespace tiny_cnn;
-using namespace tiny_cnn::activation;
+using namespace tiny_dnn;
+using namespace tiny_dnn::activation;
 using namespace std;
 
 template <typename N>
@@ -84,7 +84,7 @@ void train_cifar10(string data_dir_path, double learning_rate, ostream& log) {
     // create callback
     auto on_enumerate_epoch = [&]() {
         cout << t.elapsed() << "s elapsed." << endl;
-        tiny_cnn::result res = nn.test(test_images, test_labels);
+        tiny_dnn::result res = nn.test(test_images, test_labels);
         log << res.num_success << "/" << res.num_total << endl;
 
         disp.restart(train_images.size());

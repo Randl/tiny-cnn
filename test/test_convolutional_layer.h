@@ -27,9 +27,9 @@
 #pragma once
 #include "picotest/picotest.h"
 #include "testhelper.h"
-#include "tiny_cnn/tiny_cnn.h"
+#include "tiny_dnn/tiny_dnn.h"
 
-namespace tiny_cnn {
+namespace tiny_dnn {
 
 TEST(convolutional, fprop) {
     typedef network<mse, gradient_descent_levenberg_marquardt> CNN;
@@ -50,7 +50,7 @@ TEST(convolutional, fprop) {
         const vec_t& out = l.forward_propagation(in, 0);
 
         for (auto o: out)
-            EXPECT_DOUBLE_EQ(o, (tiny_cnn::float_t)0.5);
+            EXPECT_DOUBLE_EQ(o, (tiny_dnn::float_t)0.5);
 
     }
 

@@ -30,10 +30,10 @@ after_build:
   - cmd: 'cd C:\projects\build\bin\Release'
   - cmd: 'copy "C:\Libraries\boost_1_59_0\lib64-msvc-14.0\boost_system-vc140-mt-1_59.dll" .'
   - cmd: 'copy "C:\Libraries\boost_1_59_0\lib64-msvc-14.0\boost_filesystem-vc140-mt-1_59.dll" .'
-  - cmd: tiny_cnn_test.exe
+  - cmd: tiny_dnn_test.exe
 
 build:
-  project: C:\projects\build\tiny_cnn.sln
+  project: C:\projects\build\tiny_dnn.sln
 
 on_finish:
   - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
