@@ -77,7 +77,7 @@ class FullyConnectedGradOp : public core::OpKernel {
     xt::xarray<float_t> dummy;  // need lvalue for non-const reference
 
     // initialize outputs
-    prev_delta = xt::zeros<double>(prev_delta.shape());
+    prev_delta = xt::zeros<float_t>(prev_delta.shape());
 
     // call the algorithm depending on the selected engine type
 
@@ -96,7 +96,7 @@ class FullyConnectedGradOp : public core::OpKernel {
     }
     context.input_grad(0) = from_xtensor(prev_delta);
     context.input_grad(1) = from_xtensor(dB);
-    context.input_grad(2) = from_xtensor(dW);//TODO: temporary
+    context.input_grad(2) = from_xtensor(dW);  // TODO: temporary
   }
 };
 
