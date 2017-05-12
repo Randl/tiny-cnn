@@ -134,9 +134,9 @@ void parallel_for(size_t start,
 
   std::vector<std::future<void> > futures;
 
-  size_t blockStart = start;
-  size_t blockEnd   = blockStart + blockSize;
-  if (blockEnd > end) blockEnd= end;
+  size_t blockStart            = start;
+  size_t blockEnd              = blockStart + blockSize;
+  if (blockEnd > end) blockEnd = end;
 
   for (size_t i = 0; i < nthreads; i++) {
     futures.push_back(
