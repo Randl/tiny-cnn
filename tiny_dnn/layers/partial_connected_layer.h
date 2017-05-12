@@ -99,9 +99,8 @@ class partial_connected_layer : public layer {
     tensor_t &curr_delta     = *out_grad[0];
 
     // @todo revise the parallelism strategy
-    for (serial_size_t
-           sample       = 0,
-           sample_count = static_cast<serial_size_t>(prev_out.size());
+    for (serial_size_t sample = 0, sample_count = static_cast<serial_size_t>(
+                                     prev_out.size());
          sample < sample_count; ++sample) {
       for_(parallelize_, 0, in2wo_.size(), [&](const blocked_range &r) {
         for (size_t i = r.begin(); i != r.end(); i++) {

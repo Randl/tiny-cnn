@@ -228,4 +228,4 @@ TEST(batchnorm, read_write) {
   serialization_test(l1, l2);
 }
 
-}  // namespace tiny-dnn
+}  // namespace tiny_dnn

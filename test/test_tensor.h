@@ -964,4 +964,4 @@ TEST(tensor, print) { print_tester<5>(std::cout); }
 //    }
 //}
 
-}  // namespace tiny-dnn
+}  // namespace tiny_dnn

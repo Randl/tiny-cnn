@@ -107,4 +107,4 @@ TEST(slice, forward_channels) {
   }
 }
 
-}  // namespace tiny-dnn
+}  // namespace tiny_dnn
