@@ -315,7 +315,7 @@ auto host_data() {
   Tensor operator[](size_t index) { return Tensor(storage_[index]); }
 
   template <typename S>
-  xt::xrange<S> get_range(std::initializer_list<S> list) const {
+  xt::xrange<S> get_range(std::initializer_list<const S> list) const {
     // if (*(list.begin()) == -1) return xt::all();
     // if(*(list.begin())==*(list.begin()+1)) return *(list.begin());
     if (list.size() == 2) {
@@ -334,7 +334,7 @@ auto host_data() {
    */
   template <typename... Values>
   Tensor<U, xt::xview<Storage &, xt::xrange<Values>...>> subView(
-    std::initializer_list<Values>... lists) {
+    std::initializer_list<const Values>... lists) {
     // TODO(Randl): all, single, stride
     // TODO(Randl): different types of values in list won't work
     using SharedTensor = Tensor<U, xt::xview<Storage &, xt::xrange<Values>...>>;
