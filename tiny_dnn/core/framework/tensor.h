@@ -42,6 +42,11 @@ class Tensor {
   Tensor() {}
 
   /**
+   * Initializes a tensor from storage rvalue.
+   * @return
+   */
+  Tensor(Storage &&s) : storage_(std::move(s)){};
+  /**
    * Constructor that accepts a storage object and create a Tensor housing
    * that storage. Commonly used by [] operator.
    * @param storage object, can be xtarray.
@@ -93,34 +98,6 @@ class Tensor {
    */
   explicit Tensor(std::initializer_list<size_t> const &shape, U value)
     : storage_(shape, value) {}
-
-  /**
-   * Temporal method to create a new Tensor from old tensor_t
-   */
-  explicit Tensor(const tensor_t &data) {
-    std::vector<size_t> shape = {data.size(), data[0].size()};
-    storage_                  = Storage(shape);
-
-    // deep copy tensor data
-    for (size_t i = 0; i < data.size(); ++i) {
-      for (size_t j = 0; j < data[i].size(); ++j) {
-        storage_(i, j) = data[i][j];
-      }
-    }
-  }
-
-  /**
-   * Temporal method to create a new Tensor from old vec_t
-   */
-  explicit Tensor(const vec_t &data) {
-    std::vector<size_t> shape = {data.size()};
-    storage_                  = Storage(shape);
-
-    // deep copy tensor data
-    for (size_t i = 0; i < data.size(); ++i) {
-      storage_(i) = data[i];
-    }
-  }
 
   /**
    *
@@ -318,30 +295,31 @@ auto host_data() {
   /**
    * Returns view of current Tensor
    * @tparam Values index type
-   * @param lists lists of indexes
+   * @tparam InputRanges
+   * @param ranges
    * @return
    */
-  template <typename... Values>
-  Tensor<U, xt::xview<Storage &, xt::xrange<Values>...>> subView(
-    TensorRangeClass<Values>... ranges) {
-    // TODO(Randl): all, single, stride
-    using SharedTensor = Tensor<U, xt::xview<Storage &, xt::xrange<Values>...>>;
-    return SharedTensor(storage_, ranges.get_range()...);
+  template <typename... Values, template <typename> typename... InputRanges>
+  auto subView(InputRanges<Values>... ranges) {
+    // TODO(Randl): all, stride
+    using ViewType     = decltype(xt::view(storage_, ranges.get_range()...));
+    using SharedTensor = Tensor<U, ViewType>;
+    return SharedTensor(xt::view(storage_, ranges.get_range()...));
   }
 
   /**
-   * Returns constant view of current Tensor
+   * Returns view of current Tensor
    * @tparam Values index type
-   * @param lists lists of indexes
+   * @tparam InputRanges
+   * @param ranges
    * @return
    */
-  template <typename... Values>
-  const Tensor<U, const xt::xview<Storage &, xt::xrange<Values>...>> constView(
-    TensorRangeClass<Values>... ranges) const {
-    // TODO(Randl): all, single, stride
-    using SharedTensor =
-      Tensor<U, const xt::xview<Storage &, xt::xrange<Values>...>>;
-    return SharedTensor(storage_, ranges.get_range()...);
+  template <typename... Values, template <typename> typename... InputRanges>
+  auto subView(InputRanges<Values>... ranges) const {
+    // TODO(Randl): all, stride
+    using ViewType     = decltype(xt::view(storage_, ranges.get_range()...));
+    using SharedTensor = Tensor<U, const ViewType>;
+    return SharedTensor(xt::view(storage_, ranges.get_range()...));
   }
 
   /*
@@ -366,45 +344,9 @@ auto host_data() {
     return tensor;
   }
 
-  /**
-   * Creates Tensor given the storage
-   * @tparam T
-   * @param storage
-   */
-  template <class T, class S, class... Args>
-  explicit Tensor(T &storage, xt::xrange<S> r1, Args... args)
-    : storage_(xt::view(storage, r1, args...)) {}
-
   template <typename T, typename S>
   friend inline std::ostream &operator<<(std::ostream &os,
                                          const Tensor<T, S> &tensor);
-
-  /**
-   * Temporal method to convert new Tensor to tensor_t
-   * @return
-   */
-  tensor_t toTensor() const {
-    tensor_t tensor(storage_.shape()[0]);
-    for (size_t i = 0; i < storage_.shape()[0]; ++i) {
-      tensor[i].resize(storage_.shape()[1]);
-      for (size_t j = 0; j < storage_.shape()[1]; ++j) {
-        tensor[i][j] = storage_(i, j);
-      }
-    }
-    return tensor;
-  }
-
-  /**
-   * Temporal method to convert new Tensor to vec_t
-   * @return
-   */
-  vec_t toVec() const {
-    vec_t tensor(storage_.shape()[0]);
-    for (size_t i = 0; i < storage_.shape()[0]; ++i) {
-      tensor[i] = storage_(i);
-    }
-    return tensor;
-  }
 
  private:
   Storage storage_;
