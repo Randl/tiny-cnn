@@ -114,7 +114,7 @@ class Parameter {
 // todo (karandesai) : analyze performance between raw pointer and shared_ptr
 // after fc parameter integration
 
-using Parameters      = std::vector<Parameter *>;
-using ConstParameters = std::vector<const Parameter *>;
+using Parameters      = std::vector<std::shared_ptr<Parameter>>;
+using ConstParameters = std::vector<std::shared_ptr<const Parameter>>;
 
 }  // namespace tiny_dnn

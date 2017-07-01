@@ -49,11 +49,7 @@ class layer : public node {
  public:
   friend void connection_mismatch(const layer &from, const layer &to);
 
-  virtual ~layer() = default; /*{
-     for (auto &p : parameters_) {
-       delete (p);
-     }
-   };*/
+  virtual ~layer() = default;
 
   /**
    * @brief Defaul layer constructor that instantiates a N-input, M-output
@@ -369,8 +365,8 @@ class layer : public node {
                      size_t width,
                      parameter_type type,
                      bool trainable = true) {
-    parameters_.push_back(
-      new Parameter(out_channels, in_channels, height, width, type, trainable));
+    parameters_.push_back(std::make_shared<Parameter>(
+      out_channels, in_channels, height, width, type, trainable));
   }
 
   /**
@@ -384,7 +380,7 @@ class layer : public node {
    */
   Parameters parameters(bool trainable_only = false) {
     Parameters parameters;
-    for (Parameter *parameter : parameters_) {
+    for (auto parameter : parameters_) {
       if (!trainable_only || (parameter->is_trainable() && trainable_only)) {
         parameters.push_back(parameter);
       }
@@ -403,7 +399,7 @@ class layer : public node {
    */
   const ConstParameters parameters(bool trainable_only = false) const {
     ConstParameters parameters;
-    for (Parameter *parameter : parameters_) {
+    for (auto parameter : parameters_) {
       if (!trainable_only || (parameter->is_trainable() && trainable_only)) {
         parameters.push_back(parameter);
       }
@@ -411,13 +407,13 @@ class layer : public node {
     return parameters;
   }
 
-  Parameter *ith_parameter(size_t i) { return parameters_[i]; }
+  Parameter &ith_parameter(size_t i) { return *parameters_[i]; }
 
-  const Parameter *ith_parameter(size_t i) const { return parameters_[i]; }
+  const Parameter ith_parameter(size_t i) const { return *parameters_[i]; }
 
   void set_ith_parameter(size_t i, Parameter &p) {
     if (i >= parameters_.size()) parameters_.resize(i + 1);
-    parameters_[i] = &p;
+    parameters_[i] = std::make_shared<Parameter>(p);
   }
   /** @} */  // Parameter Getters and Setters
 
@@ -747,11 +743,13 @@ class layer : public node {
       switch (parameters_[i]->type()) {
         // fill parameters of weight type
         case parameter_type::weight:
-          weight_init_f_->fill(parameters_[i], fan_in_size(i), fan_out_size(i));
+          weight_init_f_->fill(parameters_[i].get(), fan_in_size(i),
+                               fan_out_size(i));
           break;
         // fill vector of bias type
         case parameter_type::bias:
-          bias_init_f_->fill(parameters_[i], fan_in_size(i), fan_out_size(i));
+          bias_init_f_->fill(parameters_[i].get(), fan_in_size(i),
+                             fan_out_size(i));
           break;
         default: break;
       }
@@ -766,7 +764,7 @@ class layer : public node {
       ith_in_node(i)->clear_grads();
     }
 
-    for (Parameter *parameter : parameters_) {
+    for (auto &parameter : parameters_) {
       parameter->clear_grads();
     }
   }
@@ -795,7 +793,7 @@ class layer : public node {
   void update_parameters(optimizer *optimizer_ptr, size_t batch_size) {
     float_t rcp_batch_size  = float_t{1} / float_t{batch_size};
     Tensor<float_t> &diff_t = parameters_diff_;
-    for (Parameter *parameter : parameters_) {
+    for (auto &parameter : parameters_) {
       if (!trainable() || !parameter->is_trainable()) {
         continue;
       }
@@ -874,7 +872,7 @@ class layer : public node {
       resize(ith_out_node(i)->get_gradient());
     }
 
-    for (Parameter *parameter : parameters_) {
+    for (auto &parameter : parameters_) {
       parameter->resize_grad(sample_count);
     }
   }
