@@ -49,11 +49,11 @@ class layer : public node {
  public:
   friend void connection_mismatch(const layer &from, const layer &to);
 
-  virtual ~layer() {
-    for (auto &p : parameters_) {
-      delete (p);
-    }
-  };
+  virtual ~layer() = default; /*{
+     for (auto &p : parameters_) {
+       delete (p);
+     }
+   };*/
 
   /**
    * @brief Defaul layer constructor that instantiates a N-input, M-output
@@ -415,7 +415,10 @@ class layer : public node {
 
   const Parameter *ith_parameter(size_t i) const { return parameters_[i]; }
 
-  void set_ith_parameter(size_t i, Parameter &p) { parameters_[i] = &p; }
+  void set_ith_parameter(size_t i, Parameter &p) {
+    if (i >= parameters_.size()) parameters_.resize(i + 1);
+    parameters_[i] = &p;
+  }
   /** @} */  // Parameter Getters and Setters
 
   virtual void save(

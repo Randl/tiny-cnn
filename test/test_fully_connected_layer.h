@@ -210,4 +210,21 @@ TEST(fully_connected, forward_nobias) {
   }
 }
 
+TEST(fully_connected, forward_p) {
+  fully_connected_layer l(3, 2, true);
+  vec_t in       = {2, 1, 3};
+  vec_t expected = {0, 2};
+  Parameter weight{1, 1, 2, 3, parameter_type::weight};
+  Parameter bias{1, 1, 1, 2, parameter_type::bias};
+  weight.set_data(Tensor<float_t>{vec_t{1, 0, -1, 2, -1, 0}});
+  bias.set_data(Tensor<float_t>{vec_t{1, -1}});
+  l.set_ith_parameter(0, weight);
+  l.set_ith_parameter(1, bias);
+  std::vector<const tensor_t *> out;
+  l.forward({{in}}, out);
+  vec_t result = (*out[0])[0];
+  for (size_t i = 0; i < result.size(); i++) {
+    EXPECT_FLOAT_EQ(expected[i], result[i]);
+  }
+}
 }  // namespace tiny_dnn
